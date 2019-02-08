@@ -11,19 +11,17 @@
  *
  * @author master
  */
-class MitraDaoImpl {
+class SKBDaoImpl {
 
-    function addMitra(Mitra $mitra) {
-        $msg = 'gagal';
+    function addSKB(AktivitasSKB $SKB) {
         $link = PDOUtil::createPDOConnection();
         try {
             $link->beginTransaction();
 
-            $query = "INSERT INTO mitra (name) VALUES(?)";
+            $query = "INSERT INTO aktivitas_skb (nama_aktivitas) VALUES(?)";
             $stmt = $link->prepare($query);
-            $stmt->bindValue(1, $mitra->getName(), PDO::PARAM_STR);
+            $stmt->bindValue(1, $SKB->getNama_aktivitas(), PDO::PARAM_STR);
             $stmt->execute();
-            $msg = 'sukses';
             $link->commit();
         } catch (PDOException $er) {
             $link->rollBack();
@@ -31,18 +29,18 @@ class MitraDaoImpl {
             die();
         }
         PDOUtil::closePDOConnection($link);
-        return $msg;
+        return $stmt;
     }
 
-    function updateMitra(Mitra $mitra) {
+    function updateSKB(AktivitasSKB $SKB) {
         $link = PDOUtil::createPDOConnection();
         // 3. insert to DB
         try {
             $link->beginTransaction();
-            $query = "UPDATE genre SET name=? WHERE id=?";
+            $query = "UPDATE aktivitas_skb SET nama_aktivitas=? WHERE id_aktivitas=?";
             $stmt = $link->prepare($query);
-            $stmt->bindValue(1, $mitra->getName(), PDO::PARAM_STR);
-            $stmt->bindValue(2, $mitra->getId(), PDO::PARAM_INT);
+            $stmt->bindValue(1, $SKB->getNama_aktivitas(), PDO::PARAM_STR);
+            $stmt->bindValue(2, $SKB->getId_aktivitas(), PDO::PARAM_INT);
             $stmt->execute();
             $link->commit();
         } catch (PDOException $er) {
@@ -51,30 +49,6 @@ class MitraDaoImpl {
             die();
         }
         PDOUtil::closePDOConnection($link);
-    }
-
-    function deleteMitra($id) {
-        $link = PDOUtil::createPDOConnection();
-        // 2. query delete
-        try {
-            $link->beginTransaction();
-            $query = "DELETE FROM Mitra WHERE id=?";
-            $stmt = $link->prepare($query);
-            $stmt->bindValue(1, $id, PDO::PARAM_INT);
-            $hasil = $stmt->execute();
-            if ($hasil == FALSE) {
-                $msg = 'Data genre tidak dapat dihapus.';
-            } else {
-                $link->commit();
-                $msg = 'Data genre berhasil dihapus.';
-            }
-        } catch (PDOException $er) {
-            $link->rollBack();
-            echo $er->getMessage();
-            die();
-        }
-        PDOUtil::closePDOConnection($link);
-        return $hasil;
     }
 
     function showAllSKB() {
@@ -92,13 +66,13 @@ class MitraDaoImpl {
         return $stmt;
     }
 
-    function getOneSKB($id) {
+    function getOneSKB(AktivitasSKB $id) {
         $link = PDOUtil::createPDOConnection();
 
         try {
             $query = 'SELECT * FROM aktivitas_skb WHERE id_aktivitas = ?';
             $stmt = $link->prepare($query);
-            $stmt->bindValue(1, $id, PDO::PARAM_INT);
+            $stmt->bindValue(1, $id->getId_aktivitas(), PDO::PARAM_INT);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AktivitasSKB');
             $stmt->execute();
         } catch (PDOException $er) {

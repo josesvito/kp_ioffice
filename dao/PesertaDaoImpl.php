@@ -7,23 +7,24 @@
  */
 
 /**
- * Description of MitraDaoImpl
+ * Description of PesertaDaoImpl
  *
  * @author master
  */
-class MitraDaoImpl {
+class PesertaDaoImpl {
 
-    function addMitra(Mitra $mitra) {
-        $msg = 'gagal';
+    function addPeserta(Peserta $peserta) {
         $link = PDOUtil::createPDOConnection();
         try {
             $link->beginTransaction();
 
-            $query = "INSERT INTO mitra (name) VALUES(?)";
+            $query = "INSERT INTO peserta (no_induk_peserta, nama_peserta, email_peserta, no_telepon) VALUES(?, ?, ?, ?)";
             $stmt = $link->prepare($query);
-            $stmt->bindValue(1, $mitra->getName(), PDO::PARAM_STR);
+            $stmt->bindValue(1, $peserta->getNo_induk_peserta(), PDO::PARAM_STR);
+            $stmt->bindValue(2, $peserta->getNama_peserta(), PDO::PARAM_STR);
+            $stmt->bindValue(3, $peserta->getEmail_peserta(), PDO::PARAM_STR);
+            $stmt->bindValue(4, $peserta->getNo_telepon(), PDO::PARAM_STR);
             $stmt->execute();
-            $msg = 'sukses';
             $link->commit();
         } catch (PDOException $er) {
             $link->rollBack();
@@ -31,18 +32,18 @@ class MitraDaoImpl {
             die();
         }
         PDOUtil::closePDOConnection($link);
-        return $msg;
+        return $stmt;
     }
 
-    function updateMitra(Mitra $mitra) {
+    function updatePeserta(Peserta $peserta) {
         $link = PDOUtil::createPDOConnection();
         // 3. insert to DB
         try {
             $link->beginTransaction();
             $query = "UPDATE genre SET name=? WHERE id=?";
             $stmt = $link->prepare($query);
-            $stmt->bindValue(1, $mitra->getName(), PDO::PARAM_STR);
-            $stmt->bindValue(2, $mitra->getId(), PDO::PARAM_INT);
+            $stmt->bindValue(1, $peserta->getName(), PDO::PARAM_STR);
+            $stmt->bindValue(2, $peserta->getId(), PDO::PARAM_INT);
             $stmt->execute();
             $link->commit();
         } catch (PDOException $er) {
@@ -53,12 +54,12 @@ class MitraDaoImpl {
         PDOUtil::closePDOConnection($link);
     }
 
-    function deleteMitra($id) {
+    function deletePeserta($id) {
         $link = PDOUtil::createPDOConnection();
         // 2. query delete
         try {
             $link->beginTransaction();
-            $query = "DELETE FROM Mitra WHERE id=?";
+            $query = "DELETE FROM Peserta WHERE id=?";
             $stmt = $link->prepare($query);
             $stmt->bindValue(1, $id, PDO::PARAM_INT);
             $hasil = $stmt->execute();
@@ -77,12 +78,12 @@ class MitraDaoImpl {
         return $hasil;
     }
 
-    function showAllJenisMitra() {
+    function showAllPeserta() {
         $link = PDOUtil::createPDOConnection();
         try {
-            $query = "SELECT * FROM jenis_mitra ORDER BY id_jenis_mitra ASC";
+            $query = "SELECT * FROM peserta ORDER BY tanggal_awal DESC";
             $stmt = $link->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'JenisMitra');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Peserta');
             $stmt->execute();
         } catch (PDOException $er) {
             echo $er->getMessage();
@@ -92,14 +93,14 @@ class MitraDaoImpl {
         return $stmt;
     }
 
-    function getOneJenisMitra($id) {
+    function getOnePeserta($id) {
         $link = PDOUtil::createPDOConnection();
 
         try {
-            $query = 'SELECT * FROM jenis_mitra WHERE id_jenis_mitra = ?';
+            $query = 'SELECT * FROM peserta WHERE id_peserta = ?';
             $stmt = $link->prepare($query);
             $stmt->bindValue(1, $id, PDO::PARAM_INT);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'JenisMitra');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Peserta');
             $stmt->execute();
         } catch (PDOException $er) {
             echo $er->getMessage();
