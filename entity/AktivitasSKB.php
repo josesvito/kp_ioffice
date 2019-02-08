@@ -11,7 +11,7 @@
  *
  * @author master
  */
-class Mitra {
+class AktivitasSKB {
 
     private $id_aktivitas;
     private $nama_aktivitas;

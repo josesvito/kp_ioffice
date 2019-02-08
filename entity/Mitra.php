@@ -114,7 +114,7 @@ class Mitra {
         if (isset($value)) {
             switch ($name) {
                 case 'cat_id':
-                    $this->kategori_mitra->setId_kategori_mitra();
+                    $this->kategori_mitra->setId_kategori_mitra($value);
                 case 'cat_name':
                     $this->kategori_mitra->setNama($value);
                 default:
