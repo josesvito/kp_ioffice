@@ -11,7 +11,7 @@
  *
  * @author master
  */
-class GenreController {
+class SKBController {
 
     //put your code here
     private $genreDaoImpl;

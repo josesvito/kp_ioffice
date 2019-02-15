@@ -4,10 +4,10 @@
         <meta http-equiv="refresh" content="0;url=pages/index.php">
         <title>SB Admin 2</title>
         <script language="javascript">
-            window.location.href = "pages/index.php"
+            window.location.href = "pages/admin.php"
         </script>
     </head>
     <body>
-        Go to <a href="pages/index.php">/pages/index.php</a>
+        Go to <a href="pages/admin.php">Admin Page</a>
     </body>
 </html>

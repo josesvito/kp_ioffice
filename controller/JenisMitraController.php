@@ -11,7 +11,7 @@
  *
  * @author master
  */
-class GenreController {
+class JenisMitraController {
 
     //put your code here
     private $genreDaoImpl;

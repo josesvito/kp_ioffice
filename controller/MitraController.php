@@ -11,7 +11,7 @@
  *
  * @author master
  */
-class GenreController {
+class MitraController {
 
     //put your code here
     private $mitraDaoImpl;
