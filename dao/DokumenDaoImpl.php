@@ -7,20 +7,24 @@
  */
 
 /**
- * Description of MitraDaoImpl
+ * Description of DokumenDaoImpl
  *
  * @author master
  */
-class KategoriMitraDaoImpl {
+class DokumenDaoImpl {
 
-    function addNewKategori(KategoriMitra $mitra) {
+    function addDokumen(Dokumen $dokumen) {
         $link = PDOUtil::createPDOConnection();
         try {
             $link->beginTransaction();
 
-            $query = "INSERT INTO kategori_mitra (nama) VALUES(?)";
+            $query = "INSERT INTO Dokumen (no_dokumen, nama_dokumen, jenis_dokumen, deskripsi_dokumen, link_dokumen) VALUES(?, ?, ?, ?, ?)";
             $stmt = $link->prepare($query);
-            $stmt->bindValue(1, $mitra->getNama(), PDO::PARAM_STR);
+            $stmt->bindValue(1, $dokumen->getNo_dokumen(), PDO::PARAM_STR);
+            $stmt->bindValue(2, $dokumen->getNama_dokumen(), PDO::PARAM_STR);
+            $stmt->bindValue(3, $dokumen->getJenis_dokumen(), PDO::PARAM_STR);
+            $stmt->bindValue(4, $dokumen->getDeskripsi_dokumen(), PDO::PARAM_STR);
+            $stmt->bindValue(5, $dokumen->getLink_dokumen(), PDO::PARAM_STR);
             $stmt->execute();
             $link->commit();
         } catch (PDOException $er) {
@@ -32,12 +36,12 @@ class KategoriMitraDaoImpl {
         return $stmt;
     }
 
-    function showAllKategoriMitra() {
+    function showAllDokumen() {
         $link = PDOUtil::createPDOConnection();
         try {
-            $query = "SELECT * FROM kategori_mitra ORDER BY id_kategori_mitra ASC";
+            $query = "SELECT * FROM dokumen";
             $stmt = $link->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'KategoriMitra');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Dokumen');
             $stmt->execute();
         } catch (PDOException $er) {
             echo $er->getMessage();
@@ -47,14 +51,14 @@ class KategoriMitraDaoImpl {
         return $stmt;
     }
 
-    function getOneKategoriMitra(KategoriMitra $id) {
+    function getOneDokumen(Dokumen $dokumen) {
         $link = PDOUtil::createPDOConnection();
 
         try {
-            $query = 'SELECT * FROM kategori_mitra WHERE id_kategori_mitra = ?';
+            $query = 'SELECT * FROM dokumen WHERE no_dokumen = ?';
             $stmt = $link->prepare($query);
-            $stmt->bindValue(1, $id->getId_kategori_mitra(), PDO::PARAM_INT);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'KategoriMitra');
+            $stmt->bindValue(1, $dokumen->getNo_dokumen(), PDO::PARAM_INT);
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
             $stmt->execute();
         } catch (PDOException $er) {
             echo $er->getMessage();

@@ -51,6 +51,7 @@ class PKSDaoImpl {
             die();
         }
         PDOUtil::closePDOConnection($link);
+        return $stmt;
     }
 
     function showAllPKS() {
@@ -75,7 +76,7 @@ class PKSDaoImpl {
             $query = 'SELECT * FROM aktivitas_pks WHERE id_aktivitas = ?';
             $stmt = $link->prepare($query);
             $stmt->bindValue(1, $id->getId_aktivitas(), PDO::PARAM_INT);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'AktivitasPKS');
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
             $stmt->execute();
         } catch (PDOException $er) {
             echo $er->getMessage();

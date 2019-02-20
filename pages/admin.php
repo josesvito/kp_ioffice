@@ -2,10 +2,10 @@
 
 <html lang="en">
     <?php
-    include_once '../controller/JenisMitraController.php';
-    include_once '../controller/KategoriMitraController.php';
+    include_once '../controller/DokumenController.php.php';
     include_once '../controller/MitraController.php';
     include_once '../controller/SKBController.php';
+    include_once '../controller/HomeController.php';
     include_once '../dao/KategoriMitraDaoImpl.php';
     include_once '../dao/MitraDaoImpl.php';
     include_once '../dao/PKSDaoImpl.php';
@@ -19,6 +19,7 @@
     include_once '../entity/Perjanjian.php';
     include_once '../entity/Peserta.php';
     include_once '../util/PDOUtil.php';
+    $view = filter_input(INPUT_GET, 'view');
     ?>
     <head>
 
@@ -39,23 +40,14 @@
         <!-- Custom CSS -->
         <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
 
-        <?php
-        $view = filter_input(INPUT_GET, 'view');
-        if (!isset($view)) {
-            ?>
-            <!-- Morris Charts CSS -->
-            <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
-            <?php
-        } else {
-            ?>
-            <!-- DataTables CSS -->
-            <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+        <!-- Morris Charts CSS -->
+        <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
 
-            <!-- DataTables Responsive CSS -->
-            <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
-            <?php
-        }
-        ?>
+        <!-- DataTables CSS -->
+        <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+        <!-- DataTables Responsive CSS -->
+        <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
 
 
         <!-- Custom Fonts -->
@@ -215,7 +207,8 @@
                 <?php
                 switch ($view) {
                     case 'dokumen':
-                        include_once 'viewDokumen.php';
+                        $dokumenController = new DokumenController();
+                        $dokumenController->viewDokumen();
                         break;
                     case 'mitra':
                         include_once 'viewMitra.php';
@@ -227,7 +220,8 @@
                         include_once 'viewPeserta.php';
                         break;
                     default:
-                        include_once 'home.php';
+                        $homeController = new HomeController();
+                        $homeController->viewHome();
                         break;
                 }
                 ?>
@@ -249,32 +243,25 @@
 
         <!-- Metis Menu Plugin JavaScript -->
         <script src="../vendor/metisMenu/metisMenu.min.js"></script>
-        <?php
-        if (!isset($view)) {
-            ?>
-            <!-- Morris Charts JavaScript -->
-            <script src="../vendor/raphael/raphael.min.js"></script>
-            <script src="../vendor/morrisjs/morris.min.js"></script>
-            <script src="../data/morris-data.js"></script>
-            <?php
-        } else {
-            ?>
-            <!-- DataTables JavaScript -->
-            <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
-            <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-            <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script>
 
-            <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-            <script>
-                $(document).ready(function () {
-                    $('#dataTables-example').DataTable({
-                        responsive: true
-                    });
+        <!-- Morris Charts JavaScript -->
+        <script src="../vendor/raphael/raphael.min.js"></script>
+        <script src="../vendor/morrisjs/morris.min.js"></script>
+        <script src="../data/morris-data.js"></script>
+
+        <!-- DataTables JavaScript -->
+        <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+        <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+        <script>
+            $(document).ready(function () {
+                $('#dataTables-example').DataTable({
+                    responsive: true
                 });
-            </script>
-            <?php
-        }
-        ?>
+            });
+        </script>
     </body>
 
 </html>
