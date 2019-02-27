@@ -11,8 +11,11 @@
   |
  */
 
-Route::get('/', 'PostController@viewHome');
-
-Route::get('/home', function() {
-    return view('home');
+Route::get('/', 'Controller@viewHome');
+Route::get('/admin', function(){
+    return redirect('');
 });
+Route::get('/perjanjian', 'Controller@viewTerm');
+Route::get('/dokumen', 'Controller@viewDoc');
+Route::get('/mitra', 'Controller@viewPartner');
+Route::get('/peserta', 'Controller@viewParticipant');

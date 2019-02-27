@@ -1,27 +1,6 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    <?php
-    //
-//    include_once '../controller/DokumenController.php.php';
-//    include_once '../controller/MitraController.php';
-//    include_once '../controller/SKBController.php';
-//    include_once '../controller/HomeController.php';
-//    include_once '../dao/KategoriMitraDaoImpl.php';
-//    include_once '../dao/MitraDaoImpl.php';
-//    include_once '../dao/PKSDaoImpl.php';
-//    include_once '../dao/PesertaDaoImpl.php';
-//    include_once '../dao/skbDaoImpl.php';
-//    include_once '../entity/AktivitasPKS.php';
-//    include_once '../entity/AktivitasSKB.php';
-//    include_once '../entity/Dokumen.php';
-//    include_once '../entity/KategoriMitra.php';
-//    include_once '../entity/Mitra.php';
-//    include_once '../entity/Perjanjian.php';
-//    include_once '../entity/Peserta.php';
-//    include_once '../util/PDOUtil.php';
-    $view = filter_input(INPUT_GET, 'view');
-    ?>
     <head>
 
         <meta charset="utf-8">
@@ -33,26 +12,26 @@
         <title>Admin International Office</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{URL::asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="{{URL::asset('vendor/metisMenu/metisMenu.min.css') }}" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="{{URL::asset('dist/css/sb-admin-2.css') }}" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="{{URL::asset('vendor/morrisjs/morris.css') }}" rel="stylesheet">
 
         <!-- DataTables CSS -->
-        <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+        <link href="{{URL::asset('vendor/datatables-plugins/dataTables.bootstrap.css') }}" rel="stylesheet">
 
         <!-- DataTables Responsive CSS -->
-        <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+        <link href="{{URL::asset('vendor/datatables-responsive/dataTables.responsive.css') }}" rel="stylesheet">
 
 
         <!-- Custom Fonts -->
-        <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="{{URL::asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -74,7 +53,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="admin.php">Admin International Office</a>
+                    <a class="navbar-brand" href="admin">Admin International Office</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -171,25 +150,25 @@
                         <ul class="nav" id="side-menu">
 
                             <li>
-                                <a href="admin.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                                <a href="admin"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                             </li>
                             <li>
-                                <a href="admin.php"><i class="fa fa-bar-chart-o fa-fw"></i> Charts</a>
+                                <a href="admin"><i class="fa fa-bar-chart-o fa-fw"></i> Charts</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-table fa-fw"></i> Tables<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="?view=perjanjian">Perjanjian</a>
+                                        <a href="perjanjian">Perjanjian</a>
                                     </li>
                                     <li>
-                                        <a href="?view=dokumen">Dokumen</a>
+                                        <a href="dokumen">Dokumen</a>
                                     </li>                                 
                                     <li>
-                                        <a href="?view=mitra">Mitra</a>
+                                        <a href="mitra">Mitra</a>
                                     </li>
                                     <li>
-                                        <a href="?view=peserta">Peserta</a>
+                                        <a href="peserta">Peserta</a>
                                     </li>  
                                 </ul>
                                 <!-- /.nav-second-level -->
@@ -205,28 +184,7 @@
             </nav>
 
             <div id="page-wrapper">
-                <?php
-                switch ($view) {
-                    case 'dokumen':
-                        $dokumenController = new DokumenController();
-                        $dokumenController->viewDokumen();
-                        break;
-                    case 'mitra':
-                        include_once 'viewMitra.php';
-                        break;
-                    case 'perjanjian':
-                        include_once 'viewPerjanjian.php';
-                        break;
-                    case 'peserta':
-                        include_once 'viewPeserta.php';
-                        break;
-                    default:
-//                        $homeController = new HomeController();
-//                        $homeController->viewHome();
-                        @include 'home';
-                        break;
-                }
-                ?>
+                @yield('content')
             </div>
             <!-- /#page-wrapper -->
 
@@ -234,27 +192,27 @@
         <!-- /#wrapper -->
 
         <!-- jQuery -->
-        <script src="../vendor/jquery/jquery.min.js"></script>
+        <script src="{{URL::asset('vendor/jquery/jquery.min.js') }}"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="{{URL::asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 
 
         <!-- Custom Theme JavaScript -->
-        <script src="../dist/js/sb-admin-2.js"></script>
+        <script src="{{URL::asset('dist/js/sb-admin-2.js') }}"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="{{URL::asset('vendor/metisMenu/metisMenu.min.js') }}"></script>
 
         <!-- Morris Charts JavaScript -->
-        <script src="../vendor/raphael/raphael.min.js"></script>
-        <script src="../vendor/morrisjs/morris.min.js"></script>
-        <script src="../data/morris-data.js"></script>
+        <script src="{{URL::asset('vendor/raphael/raphael.min.js') }}"></script>
+        <script src="{{URL::asset('vendor/morrisjs/morris.min.js') }}"></script>
+        <script src="{{URL::asset('data/morris-data.js') }}"></script>
 
         <!-- DataTables JavaScript -->
-        <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <script src="{{URL::asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{URL::asset('vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+        <script src="{{URL::asset('vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
