@@ -11,6 +11,8 @@
   |
  */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'PostController@viewHome');
+
+Route::get('/home', function() {
+    return view('home');
 });
