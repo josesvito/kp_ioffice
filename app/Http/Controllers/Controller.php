@@ -14,15 +14,12 @@ class Controller extends BaseController {
         DispatchesJobs,
         ValidatesRequests;
 
-    private $user;
-
     public function login(Request $request) {
         $data = $request->all();
-        if ($data['email'] == 'asd@asd.com' & $data['password'] == 'asd') {
+        if ($data['username'] == 'admin' & $data['password'] == 'admin') {
             return redirect()->action('Controller@viewHome');
-        } else {
-            return redirect('login');
         }
+        return back()->with('success', 'gagal login mas');
     }
 
     public function viewHome() {

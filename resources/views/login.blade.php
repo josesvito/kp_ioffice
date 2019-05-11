@@ -34,6 +34,9 @@
 
     <body>
 
+        @if(session('success'))
+        {{session('success')}}
+        @endif
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
@@ -42,7 +45,7 @@
                             <h3 class="panel-title">Please Sign In</h3>
                         </div>
                         <div class="panel-body">
-                            <form action="login" role="form" method="POST">
+                            <form method="POST">
                                 @csrf
                                 <fieldset>
                                     <div class="form-group">

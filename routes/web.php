@@ -20,14 +20,7 @@ Route::get('/logout', function() {
 Route::get('/login', function() {
     return view('login');
 });
-Route::post('/login', function() {
-    if ($_POST['username'] == 'admin' && $_POST['password'] == 'admin') {
-        $data = array_map('strval', $_POST);
-        return new Controller($data);
-    } else {
-        return back()->withInput();
-    }
-});
+Route::post('/login', 'Controller@login');
 
 Route::get('/admin', function() {
     return redirect('');

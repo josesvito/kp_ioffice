@@ -9,7 +9,8 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form action="{{action('PerjanjianController@update') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{action('PerjanjianController@update', $perjanjian->id_perjanjian) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="form-group">
                         <select class="form-control" name="mitra">
                             @foreach ($mitras as $mitra)
@@ -87,7 +88,7 @@
                             @endforeach
                         </select>
                     </div>
-                    {{ Form::hidden('_method', 'PUT') }}
+                    <input type="hidden" name="_method" value="put">
                     <a href="/perjanjian" class="btn btn-primary">Back</a>
                     <input type="submit" class="btn btn-primary pull-right" value="Save changes">
                 </form>
