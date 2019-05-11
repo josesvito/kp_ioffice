@@ -47,11 +47,17 @@ class DokumenController extends Controller {
         $dokumen->judul_dokumen = $request->input('judulDokumen');
         $dokumen->jenis_dokumen = $request->input('jenisDokumen');
         $dokumen->deskripsi_dokumen = $request->input('deskripsiDokumen');
-        $dokumen->link_dokumen = $request->input('linkDokumen');
-        $dokumen->save();
+        $dokumen->link_dokumen = $request->file('linkDokumen')->getClientOriginalName();
+        try {
+            $dokumen->save();
+            return redirect('/dokumen')->with('success', 'Dokumen Berhasil Ditambahkan');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $code = $e->errorInfo[1];
+            if ($code == '1062') {
+                return redirect('/dokumen')->with('error', 'Nomor Dokumen Sudah Ada');
+            }
+        }
         //End Create Dokumen
-
-        return redirect('/dokumen')->with('success', 'Dokumen Berhasil Ditambahkan');
     }
 
     /**

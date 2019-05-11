@@ -59,6 +59,11 @@
                                             <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                         </label>
                                     </div>
+                                    @if(session('success'))
+                                    <div style="color: red; text-align: center; " class="form-group">
+                                        {{session('success')}}
+                                    </div>
+                                    @endif
                                     <!-- Change this to a button or input when using this as a form -->
                                     <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
                                 </fieldset>

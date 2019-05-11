@@ -52,10 +52,16 @@ class MitraController extends Controller {
         $mitra->negara = $request->input('negaraMitra');
         $mitra->provinsi = $request->input('provinsiMitra');
         $mitra->manfaat = $request->input('manfaatMitra');
-        $mitra->save();
+        try {
+            $mitra->save();
+            return redirect('/mitra')->with('success', 'Mitra Berhasil Ditambahkan');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $code = $e->errorInfo[1];
+            if ($code == '1062') {
+                return redirect('/mitra')->with('error', 'Mitra Gagal Ditambahkan');
+            }
+        }
         //End Create Mitra
-
-        return redirect('/mitra')->with('success', 'Mitra Berhasil Ditambahkan');
     }
 
     /**

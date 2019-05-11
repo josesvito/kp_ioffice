@@ -19,7 +19,7 @@ class Controller extends BaseController {
         if ($data['username'] == 'admin' & $data['password'] == 'admin') {
             return redirect()->action('Controller@viewHome');
         }
-        return back()->with('success', 'gagal login mas');
+        return back()->with('error', 'Invalid username/password');
     }
 
     public function viewHome() {

@@ -65,10 +65,16 @@ class PerjanjianController extends Controller {
         $perjanjian->Aktivitas_PKS_id_aktivitas = $request->input('aktivitasPks');
         // $perjanjian->status = ($endDate - $startDate)/60/60/24;
         $perjanjian->status = 'Coming Soon';
-        $perjanjian->save();
+        try {
+            $perjanjian->save();
+            return redirect('/perjanjian')->with('success', 'Perjanjian Berhasil Ditambahkan');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $code = $e->errorInfo[1];
+            if ($code == '1062') {
+                return redirect('/perjanjian')->with('error', 'Perjanjian Gagal Ditambahkan');
+            }
+        }
         //End Create Perjanjian
-
-        return redirect('/perjanjian')->with('success', 'Perjanjian Berhasil Ditambahkan');
     }
 
     /**

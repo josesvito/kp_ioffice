@@ -13,7 +13,6 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <button class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#myModal">Tambah Peserta</button>
                 <!--Modal-->
                 <form action="{{action('PesertaController@store') }}" method="POST" enctype="multipart/form-data">
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -71,19 +70,20 @@
                         @endforeach
 
                         {{-- <tr class="gradeU">
-                            <td>Other browsers</td>
+                        <td>Other browsers</td>
                             <td>All others</td>
                             <td>-</td>
                             <td class="center">-</td>
-                            <td class="center">U</td>
+                    <td class="center">U</td>
                         </tr> --}}
                     </tbody>
                 </table>
                 <!-- /.table-responsive -->
                 <div class="well">
                     <!--                    <h4>DataTables Usage Information</h4>
-                                <p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>
-                                <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a>-->
+                        <p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>
+                        <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a>-->
+                    <button class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#myModal">Tambah Peserta</button>
                     <button class="btn btn-lg btn-success btn-block">Import from Excel</button>
                 </div>
             </div>

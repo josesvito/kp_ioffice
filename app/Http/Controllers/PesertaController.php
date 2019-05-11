@@ -46,10 +46,16 @@ class PesertaController extends Controller {
         $peserta->nama_peserta = $request->input('nama');
         $peserta->email_peserta = $request->input('email');
         $peserta->no_telepon = $request->input('nomorTelepon');
-        $peserta->save();
+        try {
+            $peserta->save();
+            return redirect('/peserta')->with('success', 'Peserta Berhasil Ditambahkan');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $code = $e->errorInfo[1];
+            if ($code == '1062') {
+                return redirect('/peserta')->with('error', 'Peserta Gagal Ditambahkan');
+            }
+        }
         //End Create Peserta
-
-        return redirect('/peserta')->with('success', 'Peserta Berhasil Ditambahkan');
     }
 
     /**
