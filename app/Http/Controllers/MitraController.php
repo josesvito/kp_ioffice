@@ -5,20 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mitra;
 use App\KategoriMitra;
+use Illuminate\Support\Facades\DB as DB;
 
-class MitraController extends Controller {
+class MitraController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $mitras = Mitra::all();
         $kategoriMitras = KategoriMitra::all();
-        return view('admin', ['selectedView' => 'viewMitra'])
-                        ->with('kategoriMitras', $kategoriMitras)
-                        ->with('mitras', $mitras);
+        $warnedTerms = DB::select('SELECT * FROM perjanjian
+        WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
+            datediff(current_date(), tanggal_akhir) <= 0');
+        $expiredTerms = DB::select('SELECT * FROM perjanjian
+        WHERE tanggal_akhir < current_date()');
+        return view('admin')
+            ->with('selectedView', 'viewMitra')
+            ->with('mitras', $mitras)
+            ->with('kategoriMitras', $kategoriMitras)
+            ->with('warnedTerms', $warnedTerms)
+            ->with('expiredTerms', $expiredTerms);
     }
 
     /**
@@ -26,7 +37,8 @@ class MitraController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -36,7 +48,8 @@ class MitraController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'namaMitra' => 'required',
             'kategoriMitra' => 'required',
@@ -70,7 +83,8 @@ class MitraController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
@@ -80,7 +94,8 @@ class MitraController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         //
     }
 
@@ -91,7 +106,8 @@ class MitraController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         //
     }
 
@@ -101,8 +117,8 @@ class MitraController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         //
     }
-
 }

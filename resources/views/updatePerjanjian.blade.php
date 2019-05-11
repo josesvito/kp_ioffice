@@ -88,7 +88,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <input type="hidden" name="_method" value="put">
+                    @method('PUT')
                     <a href="/perjanjian" class="btn btn-primary">Back</a>
                     <input type="submit" class="btn btn-primary pull-right" value="Save changes">
                 </form>

@@ -3,18 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB as DB;
 use App\Dokumen;
 
-class DokumenController extends Controller {
+class DokumenController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $dokumens = Dokumen::all();
-        return view('admin', ['selectedView' => 'viewDokumen'])->with('dokumens', $dokumens);
+        $warnedTerms = DB::select('SELECT * FROM perjanjian
+        WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
+            datediff(current_date(), tanggal_akhir) <= 0');
+        $expiredTerms = DB::select('SELECT * FROM perjanjian
+        WHERE tanggal_akhir < current_date()');
+        return view('admin')
+            ->with('selectedView', 'viewDokumen')
+            ->with('dokumens', $dokumens)
+            ->with('warnedTerms', $warnedTerms)
+            ->with('expiredTerms', $expiredTerms);
     }
 
     /**
@@ -22,7 +34,8 @@ class DokumenController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -32,7 +45,8 @@ class DokumenController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'nomorDokumen' => 'required',
             'judulDokumen' => 'required',
@@ -66,7 +80,8 @@ class DokumenController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
@@ -76,7 +91,8 @@ class DokumenController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         //
     }
 
@@ -87,7 +103,8 @@ class DokumenController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         //
     }
 
@@ -97,8 +114,8 @@ class DokumenController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         //
     }
-
 }

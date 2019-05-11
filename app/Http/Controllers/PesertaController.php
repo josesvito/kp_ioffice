@@ -4,17 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Peserta;
+use Illuminate\Support\Facades\DB as DB;
 
-class PesertaController extends Controller {
+class PesertaController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $pesertas = Peserta::orderBy('no_induk_peserta', 'DESC')->paginate(10);
-        return view('admin', ['selectedView' => 'viewPeserta'])->with('pesertas', $pesertas);
+        $warnedTerms = DB::select('SELECT * FROM perjanjian
+        WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
+            datediff(current_date(), tanggal_akhir) <= 0');
+        $expiredTerms = DB::select('SELECT * FROM perjanjian
+        WHERE tanggal_akhir < current_date()');
+        return view('admin')
+            ->with('selectedView', 'viewPeserta')
+            ->with('warnedTerms', $warnedTerms)
+            ->with('expiredTerms', $expiredTerms)
+            ->with('pesertas', $pesertas);
     }
 
     /**
@@ -22,7 +34,8 @@ class PesertaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -32,7 +45,8 @@ class PesertaController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'nip' => 'required',
             'nama' => 'required',
@@ -64,7 +78,8 @@ class PesertaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
@@ -74,7 +89,8 @@ class PesertaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         //
     }
 
@@ -85,7 +101,8 @@ class PesertaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         //
     }
 
@@ -95,8 +112,8 @@ class PesertaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         //
     }
-
 }

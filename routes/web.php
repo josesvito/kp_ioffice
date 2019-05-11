@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\PerjanjianController;
 
 /*
   |--------------------------------------------------------------------------
@@ -11,22 +12,21 @@
   |
  */
 
-use App\Http\Controllers\Controller as Controller;
-
 Route::get('/', 'Controller@viewHome');
-Route::get('/logout', function() {
-    return redirect('login');
+Route::get('/admin', function () {
+    return redirect('');
 });
-Route::get('/login', function() {
+
+Route::get('/login', function () {
     return view('login');
 });
 Route::post('/login', 'Controller@login');
-
-Route::get('/admin', function() {
-    return redirect('');
+Route::get('/logout', function () {
+    return redirect('login');
 });
 
 Route::resource('/dokumen', 'DokumenController');
 Route::resource('/perjanjian', 'PerjanjianController');
+Route::resource('/warning', 'ExpiredPerjanjianController');
 Route::resource('/mitra', 'MitraController');
 Route::resource('/peserta', 'PesertaController');
