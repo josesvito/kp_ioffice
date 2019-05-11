@@ -3,8 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/H:/Semester%206/KP%20Direktorat%20Kerja%20Sama/Laravel/kp_ioffice/resources/views/admin.blade.php</file>
-            <file>file:/H:/Semester%206/KP%20Direktorat%20Kerja%20Sama/Laravel/kp_ioffice/routes/web.php</file>
+            <file>file:/E:/Semester%206/KP%20Direktorat%20Kerja%20Sama/Laravel/kp_ioffice/app/Perjanjian.php</file>
+            <file>file:/E:/Semester%206/KP%20Direktorat%20Kerja%20Sama/Laravel/kp_ioffice/routes/web.php</file>
+            <file>file:/E:/Semester%206/KP%20Direktorat%20Kerja%20Sama/Laravel/kp_ioffice/app/Http/Controllers/PerjanjianController.php</file>
+            <file>file:/E:/Semester%206/KP%20Direktorat%20Kerja%20Sama/Laravel/kp_ioffice/resources/views/viewPerjanjian.blade.php</file>
+            <file>file:/E:/Semester%206/KP%20Direktorat%20Kerja%20Sama/Laravel/kp_ioffice/resources/views/admin.blade.php</file>
+            <file>file:/E:/Semester%206/KP%20Direktorat%20Kerja%20Sama/Laravel/kp_ioffice/resources/views/updatePerjanjian.blade.php</file>
         </group>
     </open-files>
 </project-private>

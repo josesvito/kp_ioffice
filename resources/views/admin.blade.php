@@ -2,14 +2,13 @@
 
 <html lang="en">
     <head>
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Admin International Office</title>
+        <title>Admin Direktorat Kerja Sama</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="{{URL::asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -53,7 +52,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="admin">Admin International Office</a>
+                    <a class="navbar-brand" href="admin">Admin Direktorat Kerja Sama</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -136,7 +135,7 @@
                             <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="login.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            <li><a href="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                             </li>
                         </ul>
                         <!-- /.dropdown-user -->
@@ -173,9 +172,6 @@
                                 </ul>
                                 <!-- /.nav-second-level -->
                             </li>
-
-
-
                         </ul>
                     </div>
                     <!-- /.sidebar-collapse -->
@@ -184,7 +180,7 @@
             </nav>
 
             <div id="page-wrapper">
-                @yield('content')
+                @include($selectedView)
             </div>
             <!-- /#page-wrapper -->
 
@@ -197,8 +193,7 @@
         <!-- Bootstrap Core JavaScript -->
         <script src="{{URL::asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 
-
-        <!-- Custom Theme JavaScript -->
+        <!-- Cu        stom Theme JavaScript -->
         <script src="{{URL::asset('dist/js/sb-admin-2.js') }}"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
@@ -216,11 +211,11 @@
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
-            $(document).ready(function () {
-                $('#dataTables-example').DataTable({
-                    responsive: true
-                });
-            });
+$(document).ready(function () {
+    $('#dataTables-example').DataTable({
+        responsive: true
+    });
+});
         </script>
     </body>
 

@@ -6,28 +6,27 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 
-class Controller extends BaseController
-{
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    
+class Controller extends BaseController {
+
+    use AuthorizesRequests,
+        DispatchesJobs,
+        ValidatesRequests;
+
+    private $user;
+
+    public function login(Request $request) {
+        $data = $request->all();
+        if ($data['email'] == 'asd@asd.com' & $data['password'] == 'asd') {
+            return redirect()->action('Controller@viewHome');
+        } else {
+            return redirect('login');
+        }
+    }
+
     public function viewHome() {
-        return view('home');
+        return view('admin', ['selectedView' => 'home']);
     }
-    
-    public function viewDoc() {
-        return view('viewDokumen');
-    }
-    
-    public function viewTerm() {
-        return view('viewPerjanjian');
-    }
-    
-    public function viewParticipant() {
-        return view('viewPeserta');
-    }
-    
-    public function viewPartner() {
-        return view('viewMitra');
-    }
+
 }

@@ -11,11 +11,29 @@
   |
  */
 
+use App\Http\Controllers\Controller as Controller;
+
 Route::get('/', 'Controller@viewHome');
-Route::get('/admin', function(){
+Route::get('/logout', function() {
+    return redirect('login');
+});
+Route::get('/login', function() {
+    return view('login');
+});
+Route::post('/login', function() {
+    if ($_POST['username'] == 'admin' && $_POST['password'] == 'admin') {
+        $data = array_map('strval', $_POST);
+        return new Controller($data);
+    } else {
+        return back()->withInput();
+    }
+});
+
+Route::get('/admin', function() {
     return redirect('');
 });
-Route::get('/perjanjian', 'Controller@viewTerm');
-Route::get('/dokumen', 'Controller@viewDoc');
-Route::get('/mitra', 'Controller@viewPartner');
-Route::get('/peserta', 'Controller@viewParticipant');
+
+Route::resource('/dokumen', 'DokumenController');
+Route::resource('/perjanjian', 'PerjanjianController');
+Route::resource('/mitra', 'MitraController');
+Route::resource('/peserta', 'PesertaController');
