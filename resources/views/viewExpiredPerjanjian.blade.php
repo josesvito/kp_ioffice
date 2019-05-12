@@ -29,7 +29,7 @@
                     <tbody>
                         @foreach ($wPerjanjian as $term)
                         <tr class="gradeC">
-                            <td>{{ $term->Dokumen_no_dokumen }}</td>
+                            <td>{{ $term->dokumen_no_dokumen }}</td>
                             <td>{{ $term->mitra->nama_mitra }}</td>
                             <td>{{ $term->pihak_1 }}</td>
                             <td>{{ $term->pihak_2 }}</td>
@@ -85,7 +85,7 @@
                     <tbody>
                         @foreach ($ePerjanjian as $term)
                         <tr class="gradeC">
-                            <td>{{ $term->Dokumen_no_dokumen }}</td>
+                            <td>{{ $term->dokumen_no_dokumen }}</td>
                             <td>{{ $term->mitra->nama_mitra }}</td>
                             <td>{{ $term->pihak_1 }}</td>
                             <td>{{ $term->pihak_2 }}</td>
@@ -94,7 +94,6 @@
                             @php
                             if($term->Aktivitas_PKS_id_aktivitas == NULL){
                             $pksName = '';
-                            dd('asu');
                             } else {
                             $pksName = $term->pks->nama_aktivitas;
                             }

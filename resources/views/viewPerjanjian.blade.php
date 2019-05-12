@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="form-group">
                                         <select class="form-control" name="aktivitasSkb">
-                                            <option value="" disabled selected hidden>-Aktivitas SKB-</option>
+                                            <option value="" selected>-Aktivitas SKB-</option>
                                             @foreach ($SKBs as $SKB)
                                             <option value="{{ $SKB->id_aktivitas }}">
                                                 {{ $SKB->id_aktivitas.' - '.$SKB->nama_aktivitas }}
@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="form-group">
                                         <select class="form-control" name="aktivitasPks">
-                                            <option value="" disabled selected hidden>-Aktivitas PKS-</option>
+                                            <option value="" selected>-Aktivitas PKS-</option>
                                             @foreach ($PKSs as $PKS)
                                             <option value="{{ $PKS->id_aktivitas }}">
                                                 {{ $PKS->id_aktivitas.' - '.$PKS->nama_aktivitas }}
@@ -111,13 +111,20 @@
                     <tbody>
                         @foreach ($perjanjians as $perjanjian)
                         <tr class="gradeC">
-                            <td>{{ $perjanjian->Dokumen_no_dokumen }}</td>
+                            <td>{{ $perjanjian->dokumen_no_dokumen }}</td>
                             <td>{{ $perjanjian->mitra->nama_mitra }}</td>
                             <td>{{ $perjanjian->pihak_1 }}</td>
                             <td>{{ $perjanjian->pihak_2 }}</td>
                             <td>{{ date_format(date_create($perjanjian->tanggal_awal), 'd F Y') }}</td>
                             <td>{{ date_format(date_create($perjanjian->tanggal_akhir), 'd F Y') }}</td>
-                            <td>{{ $perjanjian->pks->nama_aktivitas }}</td>
+                            @php
+                            if($perjanjian->Aktivitas_PKS_id_aktivitas == NULL){
+                            $pksName = '';
+                            } else {
+                            $pksName = $perjanjian->pks->nama_aktivitas;
+                            }
+                            @endphp
+                            <td>{{ $pksName }}</td>
                             <td>{{ $perjanjian->status }}</td>
                             <td>
                                 <a href="/perjanjian/{{ $perjanjian->id_perjanjian }}/edit" class="btn btn-primary">Update</a>
