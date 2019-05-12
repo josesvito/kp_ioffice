@@ -35,7 +35,14 @@
                             <td>{{ $term->pihak_2 }}</td>
                             <td>{{ date_format(date_create($term->tanggal_awal), 'd F Y') }}</td>
                             <td>{{ date_format(date_create($term->tanggal_akhir), 'd F Y') }}</td>
-                            <td>{{ $term->pks->nama_aktivitas }}</td>
+                            @php
+                            if($term->Aktivitas_PKS_id_aktivitas == NULL){
+                            $pksName = '';
+                            } else {
+                            $pksName = $term->pks->nama_aktivitas;
+                            }
+                            @endphp
+                            <td>{{ $pksName }}</td>
                             <td>{{ $term->status }}</td>
                             <td>
                                 <a href="/perjanjian/{{ $term->id_perjanjian }}/edit" class="btn btn-primary">Update</a>
@@ -84,7 +91,15 @@
                             <td>{{ $term->pihak_2 }}</td>
                             <td>{{ date_format(date_create($term->tanggal_awal), 'd F Y') }}</td>
                             <td>{{ date_format(date_create($term->tanggal_akhir), 'd F Y') }}</td>
-                            <td>{{ $term->pks->nama_aktivitas }}</td>
+                            @php
+                            if($term->Aktivitas_PKS_id_aktivitas == NULL){
+                            $pksName = '';
+                            dd('asu');
+                            } else {
+                            $pksName = $term->pks->nama_aktivitas;
+                            }
+                            @endphp
+                            <td>{{ $pksName }}</td>
                             <td>{{ $term->status }}</td>
                             <td>
                                 <a href="/perjanjian/{{ $term->id_perjanjian }}/edit" class="btn btn-primary">Update</a>

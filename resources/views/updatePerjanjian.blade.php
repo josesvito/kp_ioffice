@@ -89,7 +89,7 @@
                         </select>
                     </div>
                     @method('PUT')
-                    <a href="/perjanjian" class="btn btn-primary">Back</a>
+                    <a href="{{url()->previous() }}" class="btn btn-primary">Back</a>
                     <input type="submit" class="btn btn-primary pull-right" value="Save changes">
                 </form>
             </div>
