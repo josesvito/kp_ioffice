@@ -62,13 +62,13 @@ class PesertaController extends Controller
         $peserta->no_telepon = $request->input('nomorTelepon');
         try {
             $peserta->save();
-            return redirect('/peserta')->with('success', 'Peserta Berhasil Ditambahkan');
         } catch (\Illuminate\Database\QueryException $e) {
             $code = $e->errorInfo[1];
             if ($code == '1062') {
                 return redirect('/peserta')->with('error', 'Peserta Gagal Ditambahkan');
             }
         }
+        return redirect('/peserta')->with('success', 'Peserta Berhasil Ditambahkan');
         //End Create Peserta
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB as DB;
 use App\Dokumen;
+use App\Log;
 
 class DokumenController extends Controller
 {
@@ -64,13 +65,13 @@ class DokumenController extends Controller
         $dokumen->link_dokumen = $request->file('linkDokumen')->getClientOriginalName();
         try {
             $dokumen->save();
-            return redirect('/dokumen')->with('success', 'Dokumen Berhasil Ditambahkan');
         } catch (\Illuminate\Database\QueryException $e) {
             $code = $e->errorInfo[1];
             if ($code == '1062') {
                 return redirect('/dokumen')->with('error', 'Nomor Dokumen Sudah Ada');
             }
         }
+        return redirect('/dokumen')->with('success', 'Dokumen Berhasil Ditambahkan');
         //End Create Dokumen
     }
 

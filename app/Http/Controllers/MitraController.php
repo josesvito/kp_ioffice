@@ -67,13 +67,13 @@ class MitraController extends Controller
         $mitra->manfaat = $request->input('manfaatMitra');
         try {
             $mitra->save();
-            return redirect('/mitra')->with('success', 'Mitra Berhasil Ditambahkan');
         } catch (\Illuminate\Database\QueryException $e) {
             $code = $e->errorInfo[1];
             if ($code == '1062') {
                 return redirect('/mitra')->with('error', 'Mitra Gagal Ditambahkan');
             }
         }
+        return redirect('/mitra')->with('success', 'Mitra Berhasil Ditambahkan');
         //End Create Mitra
     }
 
