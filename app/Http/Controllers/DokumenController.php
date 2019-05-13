@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB as DB;
 use App\Dokumen;
 use App\Log;
 
 class DokumenController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -17,17 +15,8 @@ class DokumenController extends Controller
      */
     public function index()
     {
-        $dokumens = Dokumen::all();
-        $warnedTerms = DB::select('SELECT * FROM perjanjian
-        WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
-            datediff(current_date(), tanggal_akhir) <= 0');
-        $expiredTerms = DB::select('SELECT * FROM perjanjian
-        WHERE tanggal_akhir < current_date()');
-        return view('admin')
-            ->with('selectedView', 'viewDokumen')
-            ->with('dokumens', $dokumens)
-            ->with('warnedTerms', $warnedTerms)
-            ->with('expiredTerms', $expiredTerms);
+        $dokumens = Dokumen::where('is_deleted', 0)->get();
+        return view('pages.dokumen')->with('dokumens', $dokumens);
     }
 
     /**
@@ -52,8 +41,7 @@ class DokumenController extends Controller
             'nomorDokumen' => 'required',
             'judulDokumen' => 'required',
             'jenisDokumen' => 'required',
-            'deskripsiDokumen' => 'required',
-            'linkDokumen' => 'required'
+            'deskripsiDokumen' => 'required'
         ]);
 
         //Start Create Dokumen
@@ -62,7 +50,7 @@ class DokumenController extends Controller
         $dokumen->judul_dokumen = $request->input('judulDokumen');
         $dokumen->jenis_dokumen = $request->input('jenisDokumen');
         $dokumen->deskripsi_dokumen = $request->input('deskripsiDokumen');
-        $dokumen->link_dokumen = $request->file('linkDokumen')->getClientOriginalName();
+        $dokumen->link_dokumen = $request->input('linkDokumen');
         try {
             $dokumen->save();
         } catch (\Illuminate\Database\QueryException $e) {

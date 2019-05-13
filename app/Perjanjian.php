@@ -19,6 +19,6 @@ class Perjanjian extends Model
 
     public function pks()
     {
-        return $this->belongsTo('App\PKS', 'Aktivitas_PKS_id_aktivitas');
+        return $this->belongsTo('App\PKS', 'aktivitas_pks_id_aktivitas');
     }
 }

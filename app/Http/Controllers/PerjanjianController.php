@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 use App\Perjanjian;
 use App\Mitra;
 use App\Dokumen;
 use App\PKS;
 use App\SKB;
-use Illuminate\Support\Facades\DB as DB;
 
 class PerjanjianController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -20,25 +19,18 @@ class PerjanjianController extends Controller
      */
     public function index()
     {
-        $perjanjians = Perjanjian::orderBy('id_perjanjian', 'DESC')->paginate(10);
+        $perjanjians = Perjanjian::where('is_deleted', 0)
+            ->orderBy('id_perjanjian', 'DESC')->paginate(10);
         $mitras = Mitra::all();
         $dokumens = Dokumen::all();
         $PKSs = PKS::all();
         $SKBs = SKB::all();
-        $warnedTerms = DB::select('SELECT * FROM perjanjian
-        WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
-            datediff(current_date(), tanggal_akhir) <= 0');
-        $expiredTerms = DB::select('SELECT * FROM perjanjian
-        WHERE tanggal_akhir < current_date()');
-        return view('admin')
-            ->with('selectedView', 'viewPerjanjian')
+        return view('pages.perjanjian')
             ->with('perjanjians', $perjanjians)
             ->with('mitras', $mitras)
             ->with('SKBs', $SKBs)
             ->with('PKSs', $PKSs)
-            ->with('dokumens', $dokumens)
-            ->with('warnedTerms', $warnedTerms)
-            ->with('expiredTerms', $expiredTerms);
+            ->with('dokumens', $dokumens);
     }
 
     /**
@@ -76,8 +68,6 @@ class PerjanjianController extends Controller
         $perjanjian->tanggal_akhir = $request->input('tanggalAkhir');
         $perjanjian->Aktivitas_SKB_id_aktivitas = $request->input('aktivitasSkb');
         $perjanjian->Aktivitas_PKS_id_aktivitas = $request->input('aktivitasPks');
-        // $perjanjian->status = ($endDate - $startDate)/60/60/24;
-        $perjanjian->status = 'Coming Soon';
         try {
             $perjanjian->save();
         } catch (\Illuminate\Database\QueryException $e) {
@@ -114,15 +104,7 @@ class PerjanjianController extends Controller
         $dokumens = Dokumen::all();
         $PKSs = PKS::all();
         $SKBs = SKB::all();
-        $warnedTerms = DB::select('SELECT * FROM perjanjian
-        WHERE datediff(current_date(), tanggal_akhir) < 150 AND
-            tanggal_akhir > current_date()');
-        $expiredTerms = DB::select('SELECT * FROM perjanjian
-        WHERE tanggal_akhir < current_date()');
-        return view('admin')
-            ->with('warnedTerms', $warnedTerms)
-            ->with('expiredTerms', $expiredTerms)
-            ->with('selectedView', 'updatePerjanjian')
+        return view('pages.updatePerjanjian')
             ->with('perjanjian', $perjanjian)
             ->with('mitras', $mitras)
             ->with('dokumens', $dokumens)
@@ -156,18 +138,10 @@ class PerjanjianController extends Controller
         $perjanjian->tanggal_akhir = $request->input('tanggalAkhir');
         $perjanjian->Aktivitas_SKB_id_aktivitas = $request->input('aktivitasSkb');
         $perjanjian->Aktivitas_PKS_id_aktivitas = $request->input('aktivitasPks');
-        // $perjanjian->status = ($endDate - $startDate)/60/60/24;
-        $perjanjian->status = 'Coming Soon';
-        try {
-            $perjanjian->save();
-        } catch (\Illuminate\Database\QueryException $e) {
-            $code = $e->errorInfo[1];
-            if ($code == '1062') {
-                return redirect('/perjanjian')->with('error', 'Perjanjian Gagal Diupdate');
-            }
-        }
-        return redirect('/perjanjian')->with('success', 'Perjanjian Berhasil Diupdate');
+        $perjanjian->save();
         //End Create Perjanjian
+
+        return redirect('/perjanjian')->with('success', 'Perjanjian Berhasil Diupdate');
     }
 
     /**
@@ -179,5 +153,20 @@ class PerjanjianController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        $term = $request->term;
+        $dokumens = Dokumen::where('no_dokumen', 'LIKE', '%' . $term . '%')->get();
+        // return $dokumen;
+        if (count($dokumens) == 0) {
+            $searchResult[] = 'Tidak ada dokumen yang di temukan';
+        } else {
+            foreach ($dokumens as $key => $value) {
+                $searchResult[] = $value->no_dokumen;
+            }
+        }
+        return $searchResult;
     }
 }

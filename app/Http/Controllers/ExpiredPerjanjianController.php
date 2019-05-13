@@ -33,8 +33,7 @@ class ExpiredPerjanjianController extends Controller
         WHERE tanggal_akhir < current_date()');
         $ePerjanjian = Perjanjian::hydrate($expiredTerms);
 
-        return view('admin')
-            ->with('selectedView', 'viewExpiredPerjanjian')
+        return view('pages.viewExpiredPerjanjian')
             ->with('warnedTerms', $warnedTerms)
             ->with('expiredTerms', $expiredTerms)
             ->with('wPerjanjian', $wPerjanjian)
@@ -124,17 +123,15 @@ class ExpiredPerjanjianController extends Controller
         $perjanjian->tanggal_akhir = $request->input('tanggalAkhir');
         $perjanjian->Aktivitas_SKB_id_aktivitas = $request->input('aktivitasSkb');
         $perjanjian->Aktivitas_PKS_id_aktivitas = $request->input('aktivitasPks');
-        // $perjanjian->status = ($endDate - $startDate)/60/60/24;
-        $perjanjian->status = 'Coming Soon';
         try {
             $perjanjian->save();
+            return redirect('/perjanjian')->with('success', 'Perjanjian Berhasil Diupdate');
         } catch (\Illuminate\Database\QueryException $e) {
             $code = $e->errorInfo[1];
             if ($code == '1062') {
                 return redirect('/perjanjian')->with('error', 'Perjanjian Gagal Diupdate');
             }
         }
-        return redirect('/perjanjian')->with('success', 'Perjanjian Berhasil Diupdate');
         //End Create Perjanjian
     }
 

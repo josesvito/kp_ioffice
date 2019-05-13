@@ -1,32 +1,38 @@
 <?php
-use App\Http\Controllers\PerjanjianController;
 
 /*
-  |--------------------------------------------------------------------------
-  | Web Routes
-  |--------------------------------------------------------------------------
-  |
-  | Here is where you can register web routes for your application. These
-  | routes are loaded by the RouteServiceProvider within a group which
-  | contains the "web" middleware group. Now create something great!
-  |
- */
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
 
-Route::get('/', 'Controller@viewHome');
-Route::get('/admin', function () {
-    return redirect('');
-});
+Route::get('/', 'PagesController@index');
+Route::get('/charts', 'PagesController@charts');
 
-Route::get('/login', function () {
-    return view('login');
-});
-Route::post('/login', 'Controller@login');
-Route::get('/logout', function () {
-    return redirect('login');
-});
+//Mitra
+Route::resource('mitra', 'MitraController');
+Route::get('searchMitra', 'MitraController@search')->name('mitra.search');
 
-Route::resource('/dokumen', 'DokumenController');
-Route::resource('/perjanjian', 'PerjanjianController');
+//Peserta
+Route::resource('peserta', 'PesertaController');
+Route::get('searchPeserta', 'PesertaController@search')->name('peserta.search');
+
+//Dokumen
+Route::resource('dokumen', 'DokumenController');
+Route::get('searchDokumen', 'DokumenController@search')->name('dokumen.search');
+
+//Perjanjian
+Route::resource('perjanjian', 'PerjanjianController');
+Route::get('searchPerjanjian', 'PerjanjianController@search')->name('perjanjian.search');
+
+//Warning
 Route::resource('/warning', 'ExpiredPerjanjianController');
-Route::resource('/mitra', 'MitraController');
-Route::resource('/peserta', 'PesertaController');
+
+//Authentication
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');

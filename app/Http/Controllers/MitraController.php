@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mitra;
 use App\KategoriMitra;
-use Illuminate\Support\Facades\DB as DB;
+use Carbon\Carbon;
 
 class MitraController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -17,19 +16,11 @@ class MitraController extends Controller
      */
     public function index()
     {
-        $mitras = Mitra::all();
+        $mitras = Mitra::where('is_deleted', 0)->get();
         $kategoriMitras = KategoriMitra::all();
-        $warnedTerms = DB::select('SELECT * FROM perjanjian
-        WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
-            datediff(current_date(), tanggal_akhir) <= 0');
-        $expiredTerms = DB::select('SELECT * FROM perjanjian
-        WHERE tanggal_akhir < current_date()');
-        return view('admin')
-            ->with('selectedView', 'viewMitra')
-            ->with('mitras', $mitras)
+        return view('pages.mitra')
             ->with('kategoriMitras', $kategoriMitras)
-            ->with('warnedTerms', $warnedTerms)
-            ->with('expiredTerms', $expiredTerms);
+            ->with('mitras', $mitras);
     }
 
     /**
@@ -62,6 +53,7 @@ class MitraController extends Controller
         $mitra = new Mitra();
         $mitra->nama_mitra = $request->input('namaMitra');
         $mitra->kategori_mitra_id = $request->input('kategoriMitra');
+        $mitra->tanggal_inisiasi = Carbon::now()->toDateTimeString();
         $mitra->negara = $request->input('negaraMitra');
         $mitra->provinsi = $request->input('provinsiMitra');
         $mitra->manfaat = $request->input('manfaatMitra');

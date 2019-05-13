@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Peserta;
-use Illuminate\Support\Facades\DB as DB;
 
 class PesertaController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -16,17 +14,8 @@ class PesertaController extends Controller
      */
     public function index()
     {
-        $pesertas = Peserta::orderBy('no_induk_peserta', 'DESC')->paginate(10);
-        $warnedTerms = DB::select('SELECT * FROM perjanjian
-        WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
-            datediff(current_date(), tanggal_akhir) <= 0');
-        $expiredTerms = DB::select('SELECT * FROM perjanjian
-        WHERE tanggal_akhir < current_date()');
-        return view('admin')
-            ->with('selectedView', 'viewPeserta')
-            ->with('warnedTerms', $warnedTerms)
-            ->with('expiredTerms', $expiredTerms)
-            ->with('pesertas', $pesertas);
+        $pesertas = Peserta::where('is_deleted', 0)->orderBy('no_induk_peserta', 'DESC')->paginate(1);
+        return view('pages.peserta')->with('pesertas', $pesertas);
     }
 
     /**
