@@ -20,7 +20,7 @@ Route::get('searchMitra', 'MitraController@search')->name('mitra.search');
 
 //Peserta
 Route::resource('peserta', 'PesertaController');
-Route::get('searchPeserta', 'PesertaController@search')->name('peserta.search');
+Route::get('searchPerjanjian', 'PesertaController@searchPerjanjian')->name('peserta.searchPerjanjian');
 
 //Dokumen
 Route::resource('dokumen', 'DokumenController');

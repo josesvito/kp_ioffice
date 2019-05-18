@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 use App\Peserta;
+use App\Perjanjian;
+use App\PerjanjianHasPeserta;
+use App\Log;
+use Auth;
 
 class PesertaController extends Controller
 {
@@ -24,8 +29,14 @@ class PesertaController extends Controller
      */
     public function index()
     {
-        $pesertas = Peserta::where('is_deleted', 0)->orderBy('no_induk_peserta', 'DESC')->paginate(1);
-        return view('pages.peserta')->with('pesertas', $pesertas);
+        $relasis = PerjanjianHasPeserta::rightJoin('peserta as s', 'peserta_no_induk_peserta', '=', 'no_induk_peserta')
+            ->leftJoin('perjanjian as p', 'perjanjian_id_perjanjian', '=', 'id_perjanjian')
+            ->leftJoin('dokumen as d', 'dokumen_no_dokumen', '=', 'no_dokumen')
+            ->where('s.is_deleted', 0)->paginate(10);
+
+        // dd($relasis);
+
+        return view('pages.peserta')->with('relasis', $relasis);
     }
 
     /**
@@ -53,21 +64,39 @@ class PesertaController extends Controller
             'nomorTelepon' => 'required'
         ]);
 
+        $log = new Log();
+        $log->users_id = Auth::id();
         //Start Create Peserta
         $peserta = new Peserta();
         $peserta->no_induk_peserta = $request->input('nip');
         $peserta->nama_peserta = $request->input('nama');
         $peserta->email_peserta = $request->input('email');
         $peserta->no_telepon = $request->input('nomorTelepon');
-        try {
+        $relasi = new PerjanjianHasPeserta();
+        $relasi->perjanjian_id_perjanjian = $request->input('idPerjanjian');
+        $relasi->peserta_no_induk_peserta = $peserta->no_induk_peserta;
+        
+        if (count(Peserta::find($peserta)) == 0) {
             $peserta->save();
-        } catch (\Illuminate\Database\QueryException $e) {
-            $code = $e->errorInfo[1];
-            if ($code == '1062') {
-                return redirect('/peserta')->with('error', 'Peserta Gagal Ditambahkan');
+            $log->action = 'Add peserta '.$peserta->no_induk_peserta;
+            $log->save();
+        }
+        
+        if ($relasi->perjanjian_id_perjanjian != null) {
+            $find = PerjanjianHasPeserta::where('perjanjian_id_perjanjian', $relasi->perjanjian_id_perjanjian)
+                ->where('peserta_no_induk_peserta', $peserta->no_induk_peserta)
+                ->get();
+    
+            if (count($find) == 0) {
+                $relasi->save();
+                $log->action = 'Add peserta '.$peserta->no_induk_peserta.' to perjanjian '.$relasi->perjanjian_id_perjanjian;
+                $log->save();
+                return redirect('/peserta')->with('success', 'Peserta Berhasil Didaftarkan');
+            } else {
+                return redirect('/peserta')->with('error', 'Peserta Sudah Terdaftar');
             }
         }
-        return redirect('/peserta')->with('success', 'Peserta Berhasil Ditambahkan');
+        return redirect('/peserta')->with('error', 'Data Peserta Sudah Ada');
         //End Create Peserta
     }
 
@@ -114,5 +143,28 @@ class PesertaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function searchPerjanjian(Request $request)
+    {
+        $term = $request->get('term', '');
+
+        $queries=DB::table('perjanjian')
+        ->join('dokumen', 'dokumen_no_dokumen', '=', 'dokumen.no_dokumen')
+        ->where('no_dokumen', 'LIKE', '%'.$term.'%')
+        ->where('jenis_dokumen', '=', 'Perjanjian Kerja Sama')
+        ->select('id_perjanjian', 'no_dokumen')
+        ->get();
+
+        $results=array();
+
+        foreach ($queries as  $query) {
+            $results[] = ['id' => $query->id_perjanjian, 'value' => $query->no_dokumen];
+        }
+        if (count($results)) {
+            return response()->json($results);
+        } else {
+            return ['id'=>'','value'=>'Perjanjian tidak ditemukan'];
+        }
     }
 }
