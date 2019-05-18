@@ -3,15 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Peserta;
+use App\Log;
 
-class PesertaController extends Controller
+class LogController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
@@ -24,8 +19,8 @@ class PesertaController extends Controller
      */
     public function index()
     {
-        $pesertas = Peserta::where('is_deleted', 0)->orderBy('no_induk_peserta', 'DESC')->paginate(1);
-        return view('pages.peserta')->with('pesertas', $pesertas);
+        $logs = Log::all();
+        return view('pages.log')->with('logs', $logs);
     }
 
     /**
@@ -46,29 +41,7 @@ class PesertaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'nip' => 'required',
-            'nama' => 'required',
-            'email' => 'required',
-            'nomorTelepon' => 'required'
-        ]);
-
-        //Start Create Peserta
-        $peserta = new Peserta();
-        $peserta->no_induk_peserta = $request->input('nip');
-        $peserta->nama_peserta = $request->input('nama');
-        $peserta->email_peserta = $request->input('email');
-        $peserta->no_telepon = $request->input('nomorTelepon');
-        try {
-            $peserta->save();
-        } catch (\Illuminate\Database\QueryException $e) {
-            $code = $e->errorInfo[1];
-            if ($code == '1062') {
-                return redirect('/peserta')->with('error', 'Peserta Gagal Ditambahkan');
-            }
-        }
-        return redirect('/peserta')->with('success', 'Peserta Berhasil Ditambahkan');
-        //End Create Peserta
+        //
     }
 
     /**

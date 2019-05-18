@@ -5,10 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mitra;
 use App\KategoriMitra;
+use App\JenisMitra;
+use App\Log;
+use Auth;
 use Carbon\Carbon;
 
 class MitraController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +31,10 @@ class MitraController extends Controller
     {
         $mitras = Mitra::where('is_deleted', 0)->get();
         $kategoriMitras = KategoriMitra::all();
+        $jenisMitras = JenisMitra::all();
         return view('pages.mitra')
             ->with('kategoriMitras', $kategoriMitras)
+            ->with('jenisMitras', $jenisMitras)
             ->with('mitras', $mitras);
     }
 
@@ -44,19 +59,26 @@ class MitraController extends Controller
         $this->validate($request, [
             'namaMitra' => 'required',
             'kategoriMitra' => 'required',
+            'jenisMitra' => 'required',
+            'emailMitra' => 'required',
             'negaraMitra' => 'required',
             'provinsiMitra' => 'required',
-            'manfaatMitra' => 'required'
+            'kotaMitra' => 'required',
+            'alamatMitra' => 'required',
+            'kodePosMitra' => 'required',
         ]);
 
         //Start Create Mitra
         $mitra = new Mitra();
         $mitra->nama_mitra = $request->input('namaMitra');
         $mitra->kategori_mitra_id = $request->input('kategoriMitra');
-        $mitra->tanggal_inisiasi = Carbon::now()->toDateTimeString();
+        $mitra->jenis_mitra_id = $request->input('jenisMitra');
+        $mitra->email = $request->input('emailMitra');
         $mitra->negara = $request->input('negaraMitra');
         $mitra->provinsi = $request->input('provinsiMitra');
-        $mitra->manfaat = $request->input('manfaatMitra');
+        $mitra->kota = $request->input('kotaMitra');
+        $mitra->alamat = $request->input('alamatMitra');
+        $mitra->kode_pos = $request->input('kodePosMitra');
         try {
             $mitra->save();
         } catch (\Illuminate\Database\QueryException $e) {
@@ -65,6 +87,10 @@ class MitraController extends Controller
                 return redirect('/mitra')->with('error', 'Mitra Gagal Ditambahkan');
             }
         }
+        $log = new Log();
+        $log->users_id = Auth::id();
+        $log->action = 'create new mitra id:'.$mitra->id_mitra;
+        $log->save();
         return redirect('/mitra')->with('success', 'Mitra Berhasil Ditambahkan');
         //End Create Mitra
     }
