@@ -15,4 +15,8 @@ class Mitra extends Model
     public function kategoriMitra() {
         return $this->belongsTo('App\KategoriMitra', 'kategori_mitra_id');
     }
+
+    public function jenisMitra() {
+        return $this->belongsTo('App\JenisMitra', 'jenis_mitra_id');
+    }
 }
