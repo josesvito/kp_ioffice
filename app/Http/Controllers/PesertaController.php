@@ -96,7 +96,7 @@ class PesertaController extends Controller
                 return redirect('/peserta')->with('error', 'Peserta Sudah Terdaftar');
             }
         }
-        return redirect('/peserta')->with('error', 'Data Peserta Sudah Ada');
+        return redirect('/peserta')->with('success', 'Data Peserta Sudah Masuk');
         //End Create Peserta
     }
 
