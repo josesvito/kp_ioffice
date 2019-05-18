@@ -64,8 +64,6 @@ class PesertaController extends Controller
             'nomorTelepon' => 'required'
         ]);
 
-        $log = new Log();
-        $log->users_id = Auth::id();
         //Start Create Peserta
         $peserta = new Peserta();
         $peserta->no_induk_peserta = $request->input('nip');
@@ -78,6 +76,8 @@ class PesertaController extends Controller
         
         if (count(Peserta::find($peserta)) == 0) {
             $peserta->save();
+            $log = new Log();
+            $log->users_id = Auth::id();
             $log->action = 'Add peserta '.$peserta->no_induk_peserta;
             $log->save();
         }
@@ -89,6 +89,8 @@ class PesertaController extends Controller
     
             if (count($find) == 0) {
                 $relasi->save();
+                $log = new Log();
+                $log->users_id = Auth::id();
                 $log->action = 'Add peserta '.$peserta->no_induk_peserta.' to perjanjian '.$relasi->perjanjian_id_perjanjian;
                 $log->save();
                 return redirect('/peserta')->with('success', 'Peserta Berhasil Didaftarkan');

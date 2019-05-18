@@ -19,7 +19,7 @@ class LogController extends Controller
      */
     public function index()
     {
-        $logs = Log::all();
+        $logs = Log::all()->sortByDesc('time');
         return view('pages.log')->with('logs', $logs);
     }
 
