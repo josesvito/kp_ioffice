@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Warning extends Model
+class SKB extends Model
 {
-    protected $table = 'table_warning';
+    protected $table = 'aktivitas_skb';
 }

@@ -9,16 +9,6 @@ use App\Log;
 class DokumenController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -47,7 +37,30 @@ class DokumenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'nomorDokumen' => 'required',
+            'judulDokumen' => 'required',
+            'jenisDokumen' => 'required',
+            'deskripsiDokumen' => 'required'
+        ]);
+
+        //Start Create Dokumen
+        $dokumen = new Dokumen();
+        $dokumen->no_dokumen = $request->input('nomorDokumen');
+        $dokumen->judul_dokumen = $request->input('judulDokumen');
+        $dokumen->jenis_dokumen = $request->input('jenisDokumen');
+        $dokumen->deskripsi_dokumen = $request->input('deskripsiDokumen');
+        $dokumen->link_dokumen = $request->input('linkDokumen');
+        try {
+            $dokumen->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            $code = $e->errorInfo[1];
+            if ($code == '1062') {
+                return redirect('/dokumen')->with('error', 'Nomor Dokumen Sudah Ada');
+            }
+        }
+        return redirect('/dokumen')->with('success', 'Dokumen Berhasil Ditambahkan');
+        //End Create Dokumen
     }
 
     /**

@@ -8,17 +8,17 @@ class Perjanjian extends Model
 {
     protected $table = 'perjanjian';
 
+    protected $primaryKey = 'id_perjanjian';
+
     public $timestamps = false;
 
-    protected $primaryKey = 'id_perjanjian';
-    
     public function mitra()
     {
         return $this->belongsTo('App\Mitra', 'Mitra_id_mitra');
     }
 
-    public function dokumen()
+    public function pks()
     {
-        return $this->belongsTo('App\Dokumen', 'dokumen_no_dokumen');
+        return $this->belongsTo('App\PKS', 'aktivitas_pks_id_aktivitas');
     }
 }

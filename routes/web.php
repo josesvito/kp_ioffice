@@ -28,16 +28,10 @@ Route::get('searchDokumen', 'DokumenController@search')->name('dokumen.search');
 
 //Perjanjian
 Route::resource('perjanjian', 'PerjanjianController');
-Route::get('searchDokumenSkb', 'PerjanjianController@searchDokumenSkb')->name('perjanjian.searchDokumenSkb');
-Route::get('searchMitra', 'PerjanjianController@searchMitra')->name('perjanjian.searchMitra');
-Route::get('searchPihak1', 'PerjanjianController@searchPihak1')->name('perjanjian.searchPihak1');
-Route::get('searchPihak2', 'PerjanjianController@searchPihak2')->name('perjanjian.searchPihak2');
+Route::get('searchPerjanjian', 'PerjanjianController@search')->name('perjanjian.search');
 
 //Warning
 Route::resource('/warning', 'ExpiredPerjanjianController');
-
-//DBLog
-Route::resource('/log', 'LogController');
 
 //Authentication
 Auth::routes();

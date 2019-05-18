@@ -9,16 +9,8 @@
 
         @php
         $warnedTerms = DB::select('SELECT * FROM perjanjian
-            JOIN dokumen ON dokumen.no_dokumen = perjanjian.dokumen_no_dokumen
-            JOIN mitra ON mitra.id_mitra = perjanjian.Mitra_id_mitra
-            WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
-                datediff(current_date(), tanggal_akhir) <= 0');
-        $expiredTerms = DB::select('SELECT * FROM perjanjian
-            JOIN dokumen ON dokumen.no_dokumen = perjanjian.dokumen_no_dokumen
-            JOIN mitra ON mitra.id_mitra = perjanjian.Mitra_id_mitra
-            WHERE tanggal_akhir < current_date()');
-        @endphp
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        WHERE datediff(current_date(), tanggal_akhir) >= -150 AND
+        datediff(current_date(), tanggal_akhir) <= 0'); $expiredTerms=DB::select('SELECT * FROM perjanjian WHERE tanggal_akhir < current_date()'); @endphp <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -38,7 +30,11 @@
                     </div>
                 </li>
                 @endauth
+
+
+
             </ul>
+
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
@@ -50,20 +46,15 @@
                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                 </li>
                 @else
-                <li class="nav-item">
-                        <a class="nav-link" href="log">Action Log</a>
-                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Notifikasi</a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="warning">
-                            {{ count($warnedTerms) }}
-                            Warning Perjanjian
+                            {{ count($warnedTerms) }} Warning Perjanjian
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="warning">
-                            {{ count($expiredTerms) }}
-                            Expired Perjanjian
+                            {{ count($expiredTerms) }} Expired Perjanjian
                         </a>
                     </div>
                 </li>
@@ -87,4 +78,60 @@
             </ul>
     </div>
     </div>
+    {{-- <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+
+                <li>
+                    <a href="/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="/charts"><i class="fa fa-bar-chart-o fa-fw"></i> Charts</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-table fa-fw"></i> Tables<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="/perjanjian">Perjanjian</a>
+                        </li>
+                        <li>
+                            <a href="/dokumen">Dokumen</a>
+                        </li>
+                        <li>
+                            <a href="/mitra">Mitra</a>
+                        </li>
+                        <li>
+                            <a href="/peserta">Peserta</a>
+                        </li>
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div> --}}
+    <!-- /.navbar-static-side -->
 </nav>
+
+{{-- <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">{{ config('app.name') }}</a>
+</div>
+
+<!--/navbar-right-->
+<ul class="nav navbar-top-links navbar-right">
+    <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+</ul>
+<!--#/navbar-right-->
+
+
+
+
+
+</nav> --}}

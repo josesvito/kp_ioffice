@@ -75,6 +75,7 @@
                             <th>Pihak 2</th>
                             <th>Tanggal Awal</th>
                             <th>Tanggal Akhir</th>
+                            <th>Aktivitas PKS</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -84,12 +85,20 @@
                         <tr class="gradeC">
                             <td>{{ $term->dokumen_no_dokumen }}</td>
                             <td>{{ $term->mitra->nama_mitra }}</td>
-                            <td>{{ $term->dokumen->pihak_1 }}</td>
-                            <td>{{ $term->dokumen->pihak_2 }}</td>
-                            <td>{{ date_format(date_create($term->dokumen->tanggal_awal), 'd F Y') }}</td>
-                            <td>{{ date_format(date_create($term->dokumen->tanggal_akhir), 'd F Y') }}</td>
+                            <td>{{ $term->pihak_1 }}</td>
+                            <td>{{ $term->pihak_2 }}</td>
+                            <td>{{ date_format(date_create($term->tanggal_awal), 'd F Y') }}</td>
+                            <td>{{ date_format(date_create($term->tanggal_akhir), 'd F Y') }}</td>
                             @php
-                            $difference = date_diff(date_create($term->dokumen->tanggal_akhir), date_create(date('Y-m-d')));
+                            if($term->aktivitas_pks_id_aktivitas == NULL){
+                            $pksName = '';
+                            } else {
+                            $pksName = $term->pks->nama_aktivitas;
+                            }
+                            @endphp
+                            <td>{{ $pksName }}</td>
+                            @php
+                            $difference = date_diff(date_create($term->tanggal_akhir), date_create(date('Y-m-d')));
                             if($difference->days > 0 && $difference->invert == 0){
                             $status = 'Expired - '.$difference->days.'d ago';
                             } else {
