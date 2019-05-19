@@ -37,7 +37,7 @@ Route::get('searchPihak2', 'PerjanjianController@searchPihak2')->name('perjanjia
 Route::get('/warning', function () {
     $perjanjianController = App::make('\App\Http\Controllers\PerjanjianController');
     return view('pages.viewExpiredPerjanjian')->with('perjanjian', $perjanjianController->warningPerjanjian());
-});
+})->name('perjanjian.warning');
 
 //DBLog
 Route::resource('/log', 'LogController');

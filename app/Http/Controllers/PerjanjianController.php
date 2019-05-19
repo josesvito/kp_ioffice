@@ -238,7 +238,15 @@ class PerjanjianController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $perjanjian = Perjanjian::find($id);
+        $perjanjian->is_deleted = 1;
+        $perjanjian->save();
+        $log = new Log();
+        $log->users_id = Auth::id();
+        $log->action = 'soft deleted perjanjian id '.$perjanjian->id_perjanjian;
+        $log->save();
+
+        return redirect(url()->previous());
     }
 
     public function warningPerjanjian()
@@ -246,9 +254,10 @@ class PerjanjianController extends Controller
         $query = DB::select('SELECT * FROM perjanjian
             JOIN dokumen ON dokumen.no_dokumen = perjanjian.dokumen_no_dokumen
             JOIN mitra ON mitra.id_mitra = perjanjian.Mitra_id_mitra
-            WHERE datediff(current_date(), tanggal_akhir) >= -150
+            WHERE (datediff(current_date(), tanggal_akhir) >= -150
             AND datediff(current_date(), tanggal_akhir) <= 0
-            OR tanggal_akhir < current_date()');
+            OR tanggal_akhir < current_date())
+            AND perjanjian.is_deleted = 0');
         $perjanjian = Perjanjian::hydrate($query);
 
         return $perjanjian;

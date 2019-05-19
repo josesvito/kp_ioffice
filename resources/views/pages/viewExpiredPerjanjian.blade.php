@@ -42,7 +42,16 @@
                             @endphp
                             <td>{{ $status }}</td>
                             <td>
-                                <a href="/perjanjian/{{ $term->id_perjanjian }}/edit" class="btn btn-primary">Update</a>
+                                {!! Form::open(['action' => ['PerjanjianController@destroy',
+                                $term->id_perjanjian], 'method' => 'POST']) !!}
+                                {{ Form::hidden('_method', 'DELETE')}}
+                                @if(strpos($status, 'Aktif') !== false)
+                                <a href="{{route('perjanjian.destroy', $term->id_perjanjian)}}"
+                                    class="btn btn-primary disabled">Mark for Delete</a>
+                                @else
+                                <input type="submit" class="btn btn-primary" value="Mark for Delete">
+                                @endif
+                                {!! Form::close() !!}
                             </td>
                         </tr>
                         @endforeach
