@@ -7,8 +7,7 @@ use DB;
 use App\Perjanjian;
 use App\Mitra;
 use App\Dokumen;
-use App\Log;
-// use Illuminate\Support\Carbon;
+use App\jenisDokumen;
 use Carbon\Carbon;
 
 class PerjanjianController extends Controller
@@ -34,10 +33,12 @@ class PerjanjianController extends Controller
             ->orderBy('id_perjanjian', 'DESC')->paginate(10);
         $mitras = Mitra::all();
         $dokumens = Dokumen::all();
+        $jenisDokumens = JenisDokumen::all();
         return view('pages.perjanjian')
             ->with('perjanjians', $perjanjians)
             ->with('mitras', $mitras)
-            ->with('dokumens', $dokumens);
+            ->with('dokumens', $dokumens)
+            ->with('jenisDokumens', $jenisDokumens);
     }
 
     /**
@@ -62,9 +63,7 @@ class PerjanjianController extends Controller
             'nomorDokumen' => 'required',
             'judulDokumen' => 'required',
             'jenisDokumen' => 'required',
-            'deskripsiDokumen' => 'required',
-            'linkDokumen' => 'file|nullable|max:4000',
-            'mitra' => 'required',
+            'linkDokumen' => 'required|max:4096|mimes:pdf',
             'pihak1' => 'required',
             'pihak2' => 'required',
             'tanggalAwal' => 'required',
@@ -92,21 +91,53 @@ class PerjanjianController extends Controller
         $dokumen = new Dokumen();
         $dokumen->no_dokumen = $request->input('nomorDokumen');
         $dokumen->judul_dokumen = $request->input('judulDokumen');
-        $dokumen->jenis_dokumen = $request->input('jenisDokumen');
-        $dokumen->deskripsi_dokumen = $request->input('deskripsiDokumen');
+        $dokumen->jenis_dokumen_id = $request->input('jenisDokumen');
+        $dokumen->manfaat_dokumen = $request->input('manfaatDokumen');
         $dokumen->link_dokumen = $fileNameToStore;
         $dokumen->pihak_1 = $request->input('pihak1');
         $dokumen->pihak_2 = $request->input('pihak2');
         $dokumen->tanggal_awal = Carbon::parse($request->input('tanggalAwal'));
         $dokumen->tanggal_akhir = Carbon::parse($request->input('tanggalAkhir'));
-        if ($request->input('jenisDokumen') == 'Surat Keputusan Bersama') {
+        if ($request->input('skb') == 'createNewDocWithSkb') {
+            $dokumen->no_skb = $request->input('noSkb');
+        } elseif ($request->input('skb') == 'createNewDoc' && $request->input('jenisDokumen') == 1) {
             $dokumen->no_skb = $dokumen->no_dokumen;
-        } elseif ($request->input('skb') == 'useExistingSkb') {
-            $dokumen->no_skb = $request->input('existingSkb');
+        } elseif ($request->input('skb') == 'createNewDoc' && $request->input('jenisDokumen') == 2) {
+            $dokumen->no_skb = null;
         }
+
+        // if ($request->input('skb') == 'createNewSkb') {
+        //         $dokumenSkb = new Dokumen();
+        //         $dokumenSkb->no_dokumen = $request->input('nomorDokumenSkb');
+        //         $dokumenSkb->judul_dokumen = $request->input('judulDokumenSkb');
+        //         $dokumenSkb->jenis_dokumen = 'Surat Keputusan Bersama';
+        //         $dokumenSkb->deskripsi_dokumen = $request->input('deskripsiDokumenSkb');
+        //         $dokumenSkb->link_dokumen = $request->input('linkDokumenSkb');
+        //         $dokumenSkb->pihak_1 = $request->input('pihak1Skb');
+        //         $dokumenSkb->pihak_2 = $request->input('pihak2Skb');
+        //         $dokumenSkb->tanggal_awal = Carbon::parse($request->input('tanggalAwalSkb'));
+        //         $dokumenSkb->tanggal_akhir = Carbon::parse($request->input('tanggalAkhirSkb'));
+        //         $dokumen->no_skb = $dokumenSkb->no_dokumen;
+        //         $perjanjianSkb = new Perjanjian();
+        //         $perjanjianSkb->Mitra_id_mitra = $request->input('idMitra');
+        //         $perjanjianSkb->dokumen_no_dokumen = $dokumenSkb->no_dokumen;
+        //         try {
+        //             $dokumenSkb->save();
+        //             $perjanjianSkb->save();
+        //         } catch (\Illuminate\Database\QueryException $e) {
+        //             $code = $e->errorInfo[1];
+        //             if ($code == '1062') {
+        //                 return redirect('/perjanjian')->with('error', 'Perjanjian Gagal Ditambahkan');
+        //             }
+        //         }
+        //     }
+        //     elseif ($request->input('skb') == 'useExistingSkb') {
+        //         $dokumen->no_skb = $request->input('existingSkb');
+        //     }
         $perjanjian = new Perjanjian();
         $perjanjian->Mitra_id_mitra = $request->input('idMitra');
         $perjanjian->dokumen_no_dokumen = $dokumen->no_dokumen;
+        $perjanjian->created_at = now();
         try {
             $dokumen->save();
             $perjanjian->save();
@@ -116,10 +147,6 @@ class PerjanjianController extends Controller
                 return redirect('/perjanjian')->with('error', 'Perjanjian Gagal Ditambahkan');
             }
         }
-        $log = new Log();
-        $log->users_id = Auth::id();
-        $log->action = 'create new perjanjian id:'.$perjanjian->id.', new dokumen:'.$dokumen->no_dokumen;
-        $log->save();
         return redirect('/perjanjian')->with('success', 'Perjanjian Berhasil Ditambahkan');
         //End Create Perjanjian
     }
@@ -146,10 +173,12 @@ class PerjanjianController extends Controller
         $perjanjian = Perjanjian::find($id);
         $mitras = Mitra::all();
         $dokumens = Dokumen::all();
+        $jenisDokumens = JenisDokumen::all();
         return view('pages.updatePerjanjian')
             ->with('perjanjian', $perjanjian)
             ->with('mitras', $mitras)
-            ->with('dokumens', $dokumens);
+            ->with('dokumens', $dokumens)
+            ->with('jenisDokumens', $jenisDokumens);
     }
 
     /**
@@ -165,14 +194,12 @@ class PerjanjianController extends Controller
             'nomorDokumen' => 'required',
             'judulDokumen' => 'required',
             'jenisDokumen' => 'required',
-            'deskripsiDokumen' => 'required',
-            'linkDokumen' => 'file|nullable|max:2000',
-            'mitra' => 'required',
+            'linkDokumen' => 'max:4096|mimes:pdf',
             'pihak1' => 'required',
             'pihak2' => 'required',
             'tanggalAwal' => 'required',
             'tanggalAkhir' => 'required',
-        ]);
+            ]);
 
         // Handle File Upload
         if ($request->hasFile('linkDokumen')) {
@@ -192,8 +219,8 @@ class PerjanjianController extends Controller
         $perjanjian = Perjanjian::find($id);
         $perjanjian->dokumen->no_dokumen = $request->input('nomorDokumen');
         $perjanjian->dokumen->judul_dokumen = $request->input('judulDokumen');
-        $perjanjian->dokumen->jenis_dokumen = $request->input('jenisDokumen');
-        $perjanjian->dokumen->deskripsi_dokumen = $request->input('deskripsiDokumen');
+        $perjanjian->dokumen->jenis_dokumen_id = $request->input('jenisDokumen');
+        $perjanjian->dokumen->manfaat_dokumen = $request->input('manfaatDokumen');
         if ($request->hasFile('linkDokumen')) {
             $perjanjian->dokumen->link_dokumen = $fileNameToStore;
         }
@@ -201,16 +228,19 @@ class PerjanjianController extends Controller
         $perjanjian->dokumen->pihak_2 = $request->input('pihak2');
         $perjanjian->dokumen->tanggal_awal = Carbon::parse($request->input('tanggalAwal'));
         $perjanjian->dokumen->tanggal_akhir = Carbon::parse($request->input('tanggalAkhir'));
+        $perjanjian->dokumen->no_skb = $request->input('noSkb');
         $perjanjian->Mitra_id_mitra = $request->input('idMitra');
-        $perjanjian->Dokumen_no_dokumen = $perjanjian->dokumen->no_dokumen;
-        try {
-            $perjanjian->save();
-        } catch (\Illuminate\Database\QueryException $e) {
-            $code = $e->errorInfo[1];
-            if ($code == '1062') {
-                return redirect('/perjanjian')->with('error', 'Perjanjian Gagal Diupdate');
-            }
-        }
+        $perjanjian->dokumen_no_dokumen = $perjanjian->dokumen->no_dokumen;
+        $perjanjian->created_at = now();
+        // try {
+        $perjanjian->save();
+        $perjanjian->dokumen->save();
+        // } catch (\Illuminate\Database\QueryException $e) {
+        //     $code = $e->errorInfo[1];
+        //     if ($code == '1062') {
+        //         return redirect('/perjanjian')->with('error', 'Perjanjian Gagal Ditambahkan');
+        //     }
+        // }
         return redirect('/perjanjian')->with('success', 'Perjanjian Berhasil Diupdate');
         //End Update Perjanjian
     }
@@ -228,18 +258,36 @@ class PerjanjianController extends Controller
 
     public function searchDokumenSkb(Request $request)
     {
-        $term = $request->term;
-        $dokumens = Dokumen::where('no_dokumen', 'LIKE', '%' . $term . '%')
-            ->where('no_dokumen', 'LIKE', '%SKB%')
-            ->get();
-        if (count($dokumens) == 0) {
-            $searchResult[] = 'Dokumen tidak ditemukan';
-        } else {
-            foreach ($dokumens as $key => $value) {
-                $searchResult[] = $value->no_dokumen;
-            }
+        // $term = $request->term;
+        // $dokumens = Dokumen::where('no_dokumen', 'LIKE', '%' . $term . '%')
+        //             ->where('no_dokumen', 'LIKE', '%SKB%')
+        //             ->get();
+        // if (count($dokumens) == 0) {
+        //     $searchResult[] = 'Dokumen SKB tidak ditemukan';
+        // } else {
+        //     foreach ($dokumens as $key => $value) {
+        //         $searchResult[] = $value->no_dokumen;
+        //     }
+        // }
+        // return $searchResult;
+
+        $term = $request->get('term', '');
+
+        $queries=DB::table('dokumen')
+                ->where('no_dokumen', 'LIKE', '%' . $term . '%')
+                ->where('no_dokumen', 'LIKE', '%SKB%')
+                ->get();
+
+        $results=array();
+
+        foreach ($queries as  $query) {
+            $results[] = ['value' => $query->no_dokumen];
         }
-        return $searchResult;
+        if (count($results)) {
+            return response()->json($results);
+        } else {
+            return ['value'=>'Dokumen SKB tidak ditemukan'];
+        }
     }
 
     public function searchMitra(Request $request)
@@ -270,7 +318,6 @@ class PerjanjianController extends Controller
         $queries=DB::table('mitra')
         ->where('nama_mitra', 'LIKE', '%'.$term.'%')
         ->where('jenis_mitra_id', '=', 1)
-        ->select('nama_mitra')
         ->get();
 
         $results=array();
@@ -292,20 +339,22 @@ class PerjanjianController extends Controller
         $queries=DB::table('mitra')
         ->where('nama_mitra', 'LIKE', '%'.$term.'%')
         ->where('jenis_mitra_id', '=', 2)
-        ->select('nama_mitra')
         ->get();
 
         $results=array();
 
         foreach ($queries as  $query) {
-            $results[] = ['value' => $query->nama_mitra];
+            $results[] = ['id' => $query->id_mitra, 'value' => $query->nama_mitra];
         }
         if (count($results)) {
             return response()->json($results);
         } else {
-            return ['value'=>'Pihak tidak ditemukan'];
+            return ['id'=>'', 'value'=>'Pihak tidak ditemukan'];
         }
     }
+}
+
+
 
     // Bekas
     // public function searchMitra(Request $request)
@@ -321,4 +370,4 @@ class PerjanjianController extends Controller
         // }
         // return $searchResult;
     // }
-}
+// }

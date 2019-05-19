@@ -12,11 +12,13 @@ class Mitra extends Model
 
     public $timestamps = false;
 
-    public function kategoriMitra() {
+    public function kategoriMitra()
+    {
         return $this->belongsTo('App\KategoriMitra', 'kategori_mitra_id');
     }
 
-    public function jenisMitra() {
+    public function jenisMitra()
+    {
         return $this->belongsTo('App\JenisMitra', 'jenis_mitra_id');
     }
 }

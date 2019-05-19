@@ -54,7 +54,6 @@
                             <th>Nomor Dokumen</th>
                             <th>Nama Dokumen</th>
                             <th>Jenis Dokumen</th>
-                            <th>Deskripsi Dokumen</th>
                             <th>Reference</th>
                             <th>Link Dokumen</th>
                         </tr>
@@ -64,9 +63,14 @@
                         <tr class="gradeC">
                             <td>{{$dokumen->no_dokumen}}</td>
                             <td>{{$dokumen->judul_dokumen}}</td>
-                            <td>{{$dokumen->jenis_dokumen}}</td>
-                            <td>{{$dokumen->deskripsi_dokumen}}</td>
-                            <td>{{$dokumen->no_skb}}</td>
+                            <td>{{$dokumen->jenisDokumen->nama}}</td>
+                            <td>
+                                @if ($dokumen->no_skb == null)
+                                    Belum ada SKB
+                                @else
+                                    {{$dokumen->no_skb}}
+                                @endif
+                            </td>
                             <td>
                                 @if ($dokumen->link_dokumen == null)
                                     <a href=""></a>

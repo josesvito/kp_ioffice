@@ -73,7 +73,7 @@ class PesertaController extends Controller
         $relasi = new PerjanjianHasPeserta();
         $relasi->perjanjian_id_perjanjian = $request->input('idPerjanjian');
         $relasi->peserta_no_induk_peserta = $peserta->no_induk_peserta;
-        
+
         if (count(Peserta::find($peserta)) == 0) {
             $peserta->save();
             $log = new Log();
@@ -81,12 +81,12 @@ class PesertaController extends Controller
             $log->action = 'Add peserta '.$peserta->no_induk_peserta;
             $log->save();
         }
-        
+
         if ($relasi->perjanjian_id_perjanjian != null) {
             $find = PerjanjianHasPeserta::where('perjanjian_id_perjanjian', $relasi->perjanjian_id_perjanjian)
                 ->where('peserta_no_induk_peserta', $peserta->no_induk_peserta)
                 ->get();
-    
+
             if (count($find) == 0) {
                 $relasi->save();
                 $log = new Log();
@@ -154,7 +154,7 @@ class PesertaController extends Controller
         $queries=DB::table('perjanjian')
         ->join('dokumen', 'dokumen_no_dokumen', '=', 'dokumen.no_dokumen')
         ->where('no_dokumen', 'LIKE', '%'.$term.'%')
-        ->where('jenis_dokumen', '=', 'Perjanjian Kerja Sama')
+        ->where('jenis_dokumen_id', '=', 2)
         ->select('id_perjanjian', 'no_dokumen')
         ->get();
 

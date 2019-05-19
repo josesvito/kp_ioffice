@@ -14,7 +14,13 @@ class Dokumen extends Model
 
     public $timestamps = false;
 
-    public function mitra() {
+    public function mitra()
+    {
         return $this->belongsTo('App\Mitra', 'kategori_mitra_id');
+    }
+
+    public function jenisDokumen()
+    {
+        return $this->belongsTo('App\JenisDokumen', 'jenis_dokumen_id');
     }
 }

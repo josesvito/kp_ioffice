@@ -94,7 +94,7 @@
                                 $jumlahPks = DB::table('dokumen')
                                             ->join('perjanjian', 'no_dokumen', '=', 'dokumen_no_dokumen')
                                             ->join('mitra', 'Mitra_id_mitra', '=', 'id_mitra')
-                                            ->where('jenis_dokumen', 'LIKE', '%Perjanjian Kerja Sama%')
+                                            ->where('jenis_dokumen_id', '=', 2)
                                             ->where('id_mitra', '=', $mitra->id_mitra)
                                             ->get();
                             @endphp
