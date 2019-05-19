@@ -9,8 +9,7 @@ class PagesController extends Controller
 {
     public function index()
     {
-        $perjanjians = Perjanjian::where('is_deleted', 0)
-            ->orderBy('id_perjanjian', 'DESC')->paginate(10);
+        $perjanjians = Perjanjian::orderBy('id_perjanjian', 'DESC')->paginate(10);
         return view('pages.index')->with('perjanjians', $perjanjians);
     }
 
