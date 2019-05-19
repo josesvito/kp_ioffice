@@ -157,7 +157,7 @@
                             @endphp
                             <td>
                                 @if ($perjanjian->dokumen->jenis_dokumen_id == 1)
-                                    {{ count($jumlahPks) }}
+                                    {{ count($jumlahPks) - 1}}
                                 @else
                                     Merupakan PKS
                                 @endif

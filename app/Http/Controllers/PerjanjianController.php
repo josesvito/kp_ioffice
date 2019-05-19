@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Auth;
 use App\Perjanjian;
 use App\Mitra;
 use App\Dokumen;
 use App\jenisDokumen;
+use App\Log;
 use Carbon\Carbon;
 
 class PerjanjianController extends Controller
@@ -105,35 +107,6 @@ class PerjanjianController extends Controller
         } elseif ($request->input('skb') == 'createNewDoc' && $request->input('jenisDokumen') == 2) {
             $dokumen->no_skb = null;
         }
-
-        // if ($request->input('skb') == 'createNewSkb') {
-        //         $dokumenSkb = new Dokumen();
-        //         $dokumenSkb->no_dokumen = $request->input('nomorDokumenSkb');
-        //         $dokumenSkb->judul_dokumen = $request->input('judulDokumenSkb');
-        //         $dokumenSkb->jenis_dokumen = 'Surat Keputusan Bersama';
-        //         $dokumenSkb->deskripsi_dokumen = $request->input('deskripsiDokumenSkb');
-        //         $dokumenSkb->link_dokumen = $request->input('linkDokumenSkb');
-        //         $dokumenSkb->pihak_1 = $request->input('pihak1Skb');
-        //         $dokumenSkb->pihak_2 = $request->input('pihak2Skb');
-        //         $dokumenSkb->tanggal_awal = Carbon::parse($request->input('tanggalAwalSkb'));
-        //         $dokumenSkb->tanggal_akhir = Carbon::parse($request->input('tanggalAkhirSkb'));
-        //         $dokumen->no_skb = $dokumenSkb->no_dokumen;
-        //         $perjanjianSkb = new Perjanjian();
-        //         $perjanjianSkb->Mitra_id_mitra = $request->input('idMitra');
-        //         $perjanjianSkb->dokumen_no_dokumen = $dokumenSkb->no_dokumen;
-        //         try {
-        //             $dokumenSkb->save();
-        //             $perjanjianSkb->save();
-        //         } catch (\Illuminate\Database\QueryException $e) {
-        //             $code = $e->errorInfo[1];
-        //             if ($code == '1062') {
-        //                 return redirect('/perjanjian')->with('error', 'Perjanjian Gagal Ditambahkan');
-        //             }
-        //         }
-        //     }
-        //     elseif ($request->input('skb') == 'useExistingSkb') {
-        //         $dokumen->no_skb = $request->input('existingSkb');
-        //     }
         $perjanjian = new Perjanjian();
         $perjanjian->Mitra_id_mitra = $request->input('idMitra');
         $perjanjian->dokumen_no_dokumen = $dokumen->no_dokumen;
@@ -141,6 +114,10 @@ class PerjanjianController extends Controller
         try {
             $dokumen->save();
             $perjanjian->save();
+            $log = new Log();
+            $log->users_id = Auth::id();
+            $log->action = 'add dokumen '.$dokumen->no_dokumen.' at perjanjian id '.$perjanjian->id_perjanjian;
+            $log->save();
         } catch (\Illuminate\Database\QueryException $e) {
             $code = $e->errorInfo[1];
             if ($code == '1062') {
@@ -235,6 +212,14 @@ class PerjanjianController extends Controller
         // try {
         $perjanjian->save();
         $perjanjian->dokumen->save();
+        $log = new Log();
+        $log->users_id = Auth::id();
+        $log->action = 'update perjanjian id '.$perjanjian->id_perjanjian;
+        $log->save();
+        $log = new Log();
+        $log->users_id = Auth::id();
+        $log->action = 'update dokumen no '.$perjanjian->dokumen->no_dokumen;
+        $log->save();
         // } catch (\Illuminate\Database\QueryException $e) {
         //     $code = $e->errorInfo[1];
         //     if ($code == '1062') {
@@ -254,6 +239,19 @@ class PerjanjianController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function warningPerjanjian()
+    {
+        $query = DB::select('SELECT * FROM perjanjian
+            JOIN dokumen ON dokumen.no_dokumen = perjanjian.dokumen_no_dokumen
+            JOIN mitra ON mitra.id_mitra = perjanjian.Mitra_id_mitra
+            WHERE datediff(current_date(), tanggal_akhir) >= -150
+            AND datediff(current_date(), tanggal_akhir) <= 0
+            OR tanggal_akhir < current_date()');
+        $perjanjian = Perjanjian::hydrate($query);
+
+        return $perjanjian;
     }
 
     public function searchDokumenSkb(Request $request)

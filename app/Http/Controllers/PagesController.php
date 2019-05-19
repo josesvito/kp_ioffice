@@ -3,19 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Perjanjian;
 
 class PagesController extends Controller
 {
-
-    public function index(){
-        return view('pages.index');
+    public function index()
+    {
+        $perjanjians = Perjanjian::where('is_deleted', 0)
+            ->orderBy('id_perjanjian', 'DESC')->paginate(10);
+        return view('pages.index')->with('perjanjians', $perjanjians);
     }
 
-    public function charts(){
+    public function charts()
+    {
         return view('pages.charts');
     }
 
-    public function services(){
+    public function services()
+    {
         $data = array(
             'title' => 'Services',
             'services' => ['Web Design', 'Programming', 'SEO']
