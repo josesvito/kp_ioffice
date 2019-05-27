@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Perjanjian;
+use App\Dokumen;
 use App\Mitra;
 use App\KategoriMitra;
 use App\JenisMitra;
 use App\Log;
+use DB;
 use Auth;
 use Carbon\Carbon;
 
@@ -60,6 +63,7 @@ class MitraController extends Controller
             'namaMitra' => 'required',
             'kategoriMitra' => 'required',
             'jenisMitra' => 'required',
+            'nomorTeleponMitra' => 'required',
             'emailMitra' => 'required',
             'negaraMitra' => 'required',
             'provinsiMitra' => 'required',
@@ -73,6 +77,7 @@ class MitraController extends Controller
         $mitra->nama_mitra = $request->input('namaMitra');
         $mitra->kategori_mitra_id = $request->input('kategoriMitra');
         $mitra->jenis_mitra_id = $request->input('jenisMitra');
+        $mitra->no_telepon = $request->input('nomorTeleponMitra');
         $mitra->email = $request->input('emailMitra');
         $mitra->negara = $request->input('negaraMitra');
         $mitra->provinsi = $request->input('provinsiMitra');
@@ -138,5 +143,17 @@ class MitraController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function detailMitra($id)
+    {
+        $mitra = Mitra::find($id);
+        $perjanjians = Perjanjian::all();
+        $dokumens = Dokumen::all();
+        return view('pages.mitraDetail')
+        ->with('mitra', $mitra)
+        ->with('perjanjians', $perjanjians)
+        ->with('dokumens', $dokumens)
+        ->with('id', $id);
     }
 }

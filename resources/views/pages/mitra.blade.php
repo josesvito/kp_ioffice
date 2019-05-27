@@ -11,50 +11,63 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <input class="form-control" placeholder="Nama Mitra" name="namaMitra">
+                    <input class="form-control" name="namaMitra" id="namaMitra" autocomplete="off" required>
+                    <label class="required">Nama Mitra</label>
                 </div>
                 <div class="form-group">
-                    <select class="form-control" name="kategoriMitra">
-                        <option disabled selected hidden>-Kategori Mitra-</option>
+                    <select class="form-control" name="kategoriMitra" id="kategoriMitra" required>
+                        <option disabled selected hidden value=''></option>
                         @foreach ($kategoriMitras as $kategoriMitra)
                         <option value='{{ $kategoriMitra->id_kategori_mitra }}'>
                             {{ $kategoriMitra->nama }}
                         </option>
                         @endforeach
                     </select>
+                    <label class="required">Kategori Mitra</label>
                 </div>
                 <div class="form-group">
-                    <select class="form-control" name="jenisMitra">
-                        <option disabled selected hidden>-Jenis Mitra-</option>
+                    <select class="form-control" name="jenisMitra" id="jenisMitra" required>
+                        <option disabled selected hidden value=''></option>
                         @foreach ($jenisMitras as $jenisMitra)
                         <option value='{{ $jenisMitra->id_jenis_mitra }}'>
                             {{ $jenisMitra->nama }}
                         </option>
                         @endforeach
                     </select>
+                    <label class="required">Jenis Mitra</label>
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control" placeholder="E-mail" name="emailMitra">
+                    <input type="email" class="form-control" name="emailMitra" id="emailMitra" autocomplete="off" required>
+                    <label class="required">Email Mitra</label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Negara" name="negaraMitra">
+                    <input class="form-control" name="nomorTeleponMitra" id="nomorTeleponMitra" autocomplete="off" required>
+                    <label class="required">Nomor Telepon Mitra</label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Provinsi" name="provinsiMitra">
+                    <input class="form-control" name="negaraMitra" id="negaraMitra" autocomplete="off" required>
+                    <label class="required">Negara Mitra</label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Kota" name="kotaMitra">
+                    <input class="form-control" name="provinsiMitra" id="provinsiMitra" autocomplete="off" required>
+                    <label class="required">Provinsi Mitra</label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Alamat" name="alamatMitra">
+                    <input class="form-control" name="kotaMitra" id="kotaMitra" autocomplete="off" required>
+                    <label class="required">Kota Mitra</label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Kode Pos" name="kodePosMitra">
+                    <input class="form-control" name="alamatMitra" id="alamatMitra" autocomplete="off" required>
+                    <label class="required">Alamat Mitra</label>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" name="kodePosMitra" id="kodePosMitra" autocomplete="off" required>
+                    <label class="required">Kode Pos Mitra</label>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-primary" value="Save changes" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                <input type="submit" class="btn btn-primary" value="Simpan" />
             </div>
         </div>
         <!-- /.modal-content -->
@@ -81,13 +94,13 @@
                             <th>Kategori Mitra</th>
                             <th>Jenis Mitra</th>
                             <th>Jumlah Aktivitas PKS</th>
-                            {{-- <th>Aktivitas PKS</th> --}}
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($mitras as $mitra)
                         <tr class="gradeC">
-                            <td>{{$mitra->nama_mitra}}</td>
+                            <td>{{ $mitra->nama_mitra }}</td>
                             <td>{{$mitra->jenisMitra->nama}}</td>
                             <td>{{$mitra->kategoriMitra->nama}}</td>
                             @php
@@ -101,9 +114,9 @@
                             <td>
                                 {{ count($jumlahPks) }}
                             </td>
-                            {{-- <td> --}}
-                                {{-- Isi Query Select Aktivitas PKS where id_mitra = ? --}}
-                            {{-- </td> --}}
+                            <td>
+                                <a href="/mitra/{{ $mitra->id_mitra }}/detail" class="btn btn-primary">Detail</a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

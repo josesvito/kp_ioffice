@@ -16,7 +16,7 @@
             $expiredTerms = DB::select('SELECT * FROM perjanjian
                 JOIN dokumen ON dokumen.no_dokumen = perjanjian.dokumen_no_dokumen
                 JOIN mitra ON mitra.id_mitra = perjanjian.Mitra_id_mitra
-                WHERE tanggal_akhir < current_date()');
+                WHERE tanggal_akhir < current_date() AND perjanjian.is_deleted = 0');
             @endphp
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->

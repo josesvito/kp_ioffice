@@ -31,8 +31,7 @@ class PerjanjianController extends Controller
      */
     public function index()
     {
-        $perjanjians = Perjanjian::where('is_deleted', 0)
-            ->orderBy('id_perjanjian', 'DESC')->paginate(10);
+        $perjanjians = Perjanjian::orderBy('is_deleted', 'ASC')->get();
         $mitras = Mitra::all();
         $dokumens = Dokumen::all();
         $jenisDokumens = JenisDokumen::all();

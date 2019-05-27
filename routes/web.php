@@ -17,6 +17,7 @@ Route::get('/charts', 'PagesController@charts');
 //Mitra
 Route::resource('mitra', 'MitraController');
 Route::get('searchMitra', 'MitraController@search')->name('mitra.search');
+Route::get('/mitra/{id}/detail', 'MitraController@detailMitra');
 
 //Peserta
 Route::resource('peserta', 'PesertaController');

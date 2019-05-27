@@ -11,20 +11,24 @@
             </div>
             <div class="modal-body ui-front">
                 <div class="form-group">
-                    <input class="form-control" placeholder="Perjanjian" id="searchPerjanjian">
+                    <input class="form-control" placeholder="  Perjanjian" id="searchPerjanjian">
                     <input hidden name="idPerjanjian" id="idPerjanjian">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="NIP" name="nip">
+                    <input class="form-control" name="nip" required>
+                    <label class="required">NIP</label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Nama" name="nama">
+                    <input class="form-control" name="nama" required>
+                    <label class="required">Nama</label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="E-mail" type="email" name="email">
+                    <input class="form-control" type="email" name="email" required>
+                    <label class="required">E-mail</label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Nomor Telepon" name="nomorTelepon">
+                    <input class="form-control" name="nomorTelepon" required>
+                    <label class="required">Nomor Telepon</label>
                 </div>
             </div>
             <div class="modal-footer">
@@ -80,13 +84,13 @@
     $(function() {
         $("#searchPerjanjian").autocomplete({
             source: "{{ route('peserta.searchPerjanjian') }}",
-                                select: function( event, ui ) {
-                                $( "#searchPerjanjian" ).val( ui.item.value );
-                                $( "#idPerjanjian" ).val( ui.item.id );
-                                return false;
-                                }
-                                });
-                                });
+            select: function( event, ui ) {
+            $( "#searchPerjanjian" ).val( ui.item.value );
+            $( "#idPerjanjian" ).val( ui.item.id );
+            return false;
+            }
+        });
+    });
 </script>
 
 @endsection
